@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { aiAnalyzeBug, fetchRunDetail } from '../api';
+import { aiAnalyzeBug, fetchRunDetail, platformAssetUrl } from '../api';
 import { AiStatusBanner } from '../components/AiStatusBanner';
 import { useApiHealth } from '../hooks/useApiHealth';
 import type { AiBugAnalysisResult, BusinessReport, RunDetail, RunTest } from '../types';
@@ -34,7 +34,7 @@ function TestRow({
       <td>{(test.durationMs / 1000).toFixed(2)}s</td>
       <td className="actions-cell">
         {test.screenshotPublic && (
-          <a href={test.screenshotPublic} target="_blank" rel="noreferrer">
+          <a href={platformAssetUrl(test.screenshotPublic)} target="_blank" rel="noreferrer">
             截图
           </a>
         )}
@@ -183,7 +183,7 @@ export function ReportsRunDetail() {
         </p>
         <p>
           <a
-            href={`/${run.playwrightReport}`}
+            href={platformAssetUrl(`/${run.playwrightReport}`)}
             target="_blank"
             rel="noreferrer"
           >
@@ -223,7 +223,7 @@ export function ReportsRunDetail() {
               <strong>{t.title}</strong>
               <img
                 className="screenshot"
-                src={t.screenshotPublic}
+                src={platformAssetUrl(t.screenshotPublic ?? '')}
                 alt={t.title}
               />
             </div>

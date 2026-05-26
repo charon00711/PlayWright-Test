@@ -22,6 +22,7 @@
     "codegen": "playwright codegen",
     "install:browsers": "playwright install chromium",
     "platform:dev": "npm run dashboard:dev",
+    "platform:server": "node scripts/platform-server.mjs",
     "dashboard:dev": "npm run dev --prefix dashboard",
     "dashboard:build": "npm run build --prefix dashboard",
     "dashboard:preview": "npm run preview --prefix dashboard"

@@ -10,8 +10,8 @@ export function ApiBanner({ requireWrite = false }: { requireWrite?: boolean }) 
     return (
       <div className="banner banner-warn">
         {requireWrite
-          ? '写操作需要本地 API。请运行：npm run platform:dev'
-          : '只读模式（静态部署）。录制、新建用例等请使用 npm run platform:dev'}
+          ? '写操作需要平台后端。请本地运行 npm run platform:dev，或在线配置 VITE_PLATFORM_API_URL。'
+          : '当前为只读模式。完整功能需要连接平台后端（VITE_PLATFORM_API_URL）。'}
       </div>
     );
   }

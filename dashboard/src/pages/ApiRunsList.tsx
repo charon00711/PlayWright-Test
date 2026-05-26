@@ -1,24 +1,10 @@
 import { useEffect, useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchApiRuns } from '../api';
+import { fetchApiRunDetail, fetchApiRuns } from '../api';
 import type { ApiRunResult, ApiRunSummary } from '../types';
-
-const staticBase = import.meta.env.BASE_URL;
 
 function formatTime(iso: string) {
   return new Date(iso).toLocaleString('zh-CN');
-}
-
-async function fetchApiRunDetail(id: string): Promise<ApiRunResult | null> {
-  try {
-    const res = await fetch(`/api/api-cases/runs/${id}`);
-    if (res.ok) return res.json();
-  } catch {
-    /* fallback */
-  }
-  const res = await fetch(`${staticBase}api-runs/${id}.json`);
-  if (!res.ok) return null;
-  return res.json();
 }
 
 export function ApiRunsList() {

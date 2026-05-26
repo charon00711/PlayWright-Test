@@ -151,7 +151,51 @@ function listBusinessReports() {
   );
 }
 
-async function handleApi(req, res, urlPath) {
+function readRunIndex() {
+  const publicIndex = path.join(PROJECT_ROOT, 'dashboard', 'public', 'runs', 'index.json');
+  if (fs.existsSync(publicIndex)) {
+    return readJson(publicIndex, { runs: [], updatedAt: null });
+  }
+
+  const runsDir = path.join(PROJECT_ROOT, 'reports', 'runs');
+  if (!fs.existsSync(runsDir)) return { runs: [], updatedAt: null };
+
+  const runs = fs
+    .readdirSync(runsDir)
+    .filter((f) => f.endsWith('.json') && f !== 'index.json' && !f.includes('-biz'))
+    .map((file) => {
+      const run = readJson(path.join(runsDir, file), {});
+      return {
+        id: run.id,
+        env: run.env,
+        baseURL: run.baseURL,
+        passed: run.passed,
+        failed: run.failed,
+        skipped: run.skipped ?? 0,
+        durationMs: run.durationMs,
+        startedAt: run.startedAt,
+        reportPath: `runs/${file}`,
+      };
+    })
+    .sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
+
+  return { runs, updatedAt: new Date().toISOString() };
+}
+
+function readRunDetail(runId) {
+  const publicRun = path.join(PROJECT_ROOT, 'dashboard', 'public', 'runs', `${runId}.json`);
+  if (fs.existsSync(publicRun)) return readJson(publicRun, null);
+
+  const runPath = path.join(PROJECT_ROOT, 'reports', 'runs', `${runId}.json`);
+  if (!fs.existsSync(runPath)) return null;
+  const run = readJson(runPath, null);
+  if (!run) return null;
+  run.businessReports = run.businessReports ?? [];
+  run.playwrightReport = run.playwrightReport ?? 'playwright-report/index.html';
+  return run;
+}
+
+export async function handleApi(req, res, urlPath) {
   const config = loadEnv(PROJECT_ROOT);
 
   if (urlPath === '/api/health' && req.method === 'GET') {
@@ -478,6 +522,17 @@ async function handleApi(req, res, urlPath) {
     return sendJson(res, 200, { reports: listBusinessReports() });
   }
 
+  if (urlPath === '/api/runs' && req.method === 'GET') {
+    return sendJson(res, 200, readRunIndex());
+  }
+
+  const runMatch = urlPath.match(/^\/api\/runs\/([^/]+)$/);
+  if (runMatch && req.method === 'GET') {
+    const run = readRunDetail(runMatch[1]);
+    if (!run) return sendJson(res, 404, { error: 'Not found' });
+    return sendJson(res, 200, run);
+  }
+
   if (urlPath === '/api/logs/status' && req.method === 'GET') {
     const events = readFileEvents(PROJECT_ROOT, { limit: 5000 });
     return sendJson(res, 200, {
@@ -606,7 +661,7 @@ const MIME_TYPES = {
   '.md': 'text/markdown; charset=utf-8',
 };
 
-function servePlaywrightReport(req, res, next) {
+export function servePlaywrightReport(req, res, next) {
   const url = new URL(req.url || '/', 'http://localhost');
   if (!url.pathname.startsWith('/playwright-report')) return next();
 
@@ -636,6 +691,78 @@ function servePlaywrightReport(req, res, next) {
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     res.end(e instanceof Error ? e.message : String(e));
   }
+}
+
+export function initPlatformServices() {
+  initScheduleManager();
+}
+
+export async function handlePlatformApiRequest(req, res) {
+  const origin = req.headers.origin || '*';
+  res.setHeader('Access-Control-Allow-Origin', process.env.CORS_ORIGIN || origin);
+  res.setHeader('Vary', 'Origin');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET,POST,PUT,PATCH,DELETE,OPTIONS',
+  );
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type,Authorization',
+  );
+
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 204;
+    res.end();
+    return true;
+  }
+
+  const url = new URL(req.url || '/', 'http://localhost');
+
+  if (url.pathname.startsWith('/playwright-report')) {
+    servePlaywrightReport(req, res, () => {
+      res.statusCode = 404;
+      res.end('Not found');
+    });
+    return true;
+  }
+
+  if (url.pathname.startsWith('/test-results')) {
+    serveTestArtifact(req, res, () => {
+      res.statusCode = 404;
+      res.end('Not found');
+    }, PROJECT_ROOT);
+    return true;
+  }
+
+  if (!url.pathname.startsWith('/api/')) return false;
+
+  const startedAt = Date.now();
+  const originalEnd = res.end.bind(res);
+  res.end = (...args) => {
+    if (!url.pathname.startsWith('/api/logs')) {
+      platformApiLogger.log({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        ts: new Date().toISOString(),
+        type: 'api',
+        source: 'platform',
+        method: req.method || 'GET',
+        url: url.pathname,
+        status: res.statusCode,
+        durationMs: Date.now() - startedAt,
+        message: `${req.method} ${url.pathname} → ${res.statusCode}`,
+      });
+    }
+    return originalEnd(...args);
+  };
+
+  try {
+    await handleApi(req, res, url.pathname);
+  } catch (e) {
+    sendJson(res, 500, {
+      error: e instanceof Error ? e.message : String(e),
+    });
+  }
+  return true;
 }
 
 export function platformApiPlugin() {

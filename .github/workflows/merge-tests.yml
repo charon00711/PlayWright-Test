@@ -78,6 +78,7 @@ jobs:
         if: always()
         env:
           VITE_BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          VITE_PLATFORM_API_URL: ${{ secrets.PLATFORM_API_URL || '' }}
         run: npm run dashboard:build
 
       - name: Upload Playwright report

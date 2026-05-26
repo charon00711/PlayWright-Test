@@ -49,14 +49,40 @@ export async function fetchConfig(): Promise<PlatformConfig | null> {
 
 // import.meta.env.BASE_URL is '/' in dev and the configured base path in production builds.
 const staticBase = import.meta.env.BASE_URL;
+const platformApiBase = (import.meta.env.VITE_PLATFORM_API_URL ?? '').replace(/\/$/, '');
+
+function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  if (typeof input === 'string' && input.startsWith('/api/') && platformApiBase) {
+    return globalThis.fetch(`${platformApiBase}${input}`, init);
+  }
+  return globalThis.fetch(input, init);
+}
+
+export function platformAssetUrl(path: string): string {
+  if (!platformApiBase) return path;
+  if (!path.startsWith('/')) return `${platformApiBase}/${path}`;
+  return `${platformApiBase}${path}`;
+}
 
 export async function fetchRunIndex(): Promise<RunIndex> {
+  try {
+    const res = await fetch('/api/runs');
+    if (res.ok) return res.json();
+  } catch {
+    /* fallback to static */
+  }
   const res = await fetch(`${staticBase}runs/index.json`);
   if (!res.ok) return { runs: [], updatedAt: null };
   return res.json();
 }
 
 export async function fetchRunDetail(id: string): Promise<RunDetail | null> {
+  try {
+    const res = await fetch(`/api/runs/${id}`);
+    if (res.ok) return res.json();
+  } catch {
+    /* fallback to static */
+  }
   const res = await fetch(`${staticBase}runs/${id}.json`);
   if (!res.ok) return null;
   return res.json();
@@ -523,5 +549,17 @@ export async function fetchApiRuns(): Promise<ApiRunsIndex> {
   }
   const res = await fetch(`${staticBase}api-runs/index.json`);
   if (!res.ok) return { runs: [] };
+  return res.json();
+}
+
+export async function fetchApiRunDetail(id: string): Promise<ApiRunResult | null> {
+  try {
+    const res = await fetch(`/api/api-cases/runs/${id}`);
+    if (res.ok) return res.json();
+  } catch {
+    /* fallback */
+  }
+  const res = await globalThis.fetch(`${staticBase}api-runs/${id}.json`);
+  if (!res.ok) return null;
   return res.json();
 }
