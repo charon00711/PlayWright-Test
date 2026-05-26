@@ -94,6 +94,8 @@ jobs:
 
       - name: Build dashboard
         if: always()
+        env:
+          VITE_BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
         run: npm run dashboard:build
 
       - name: Upload Playwright report

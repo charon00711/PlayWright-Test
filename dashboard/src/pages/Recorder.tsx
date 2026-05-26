@@ -10,10 +10,13 @@ import {
 import { ApiBanner } from '../components/ApiBanner';
 import { useApiHealth } from '../hooks/useApiHealth';
 
+// Built-in BASE_URL injected at build time (Cloudflare/GitHub Pages); fallback to dev API
+const BUILD_BASE_URL = import.meta.env.VITE_BASE_URL ?? '';
+
 export function Recorder() {
   const navigate = useNavigate();
   const apiAvailable = useApiHealth();
-  const [baseURL, setBaseURL] = useState('');
+  const [baseURL, setBaseURL] = useState(BUILD_BASE_URL);
   const [status, setStatus] = useState({
     running: false,
     output: '',
@@ -22,7 +25,10 @@ export function Recorder() {
   const [title, setTitle] = useState('录制用例');
 
   useEffect(() => {
-    fetchConfig().then((c) => c && setBaseURL(c.BASE_URL));
+    // Override with live API config when running platform:dev
+    fetchConfig().then((c) => {
+      if (c?.BASE_URL) setBaseURL(c.BASE_URL);
+    });
   }, []);
 
   useEffect(() => {
@@ -64,10 +70,17 @@ export function Recorder() {
 
       <div className="card">
         <p>
-          <strong>目标地址：</strong>
-          {baseURL || '—'}
+          <strong>测试目标：</strong>
+          {baseURL ? (
+            <a className="env-var" href={baseURL} target="_blank" rel="noreferrer">
+              {baseURL}
+            </a>
+          ) : (
+            <code className="env-var">未配置</code>
+          )}
         </p>
         <p className="muted">
+          来源：本地 <code>.env</code> 中的 BASE_URL，或 CI 构建时注入的 VITE_BASE_URL。
           将启动 Playwright Codegen 并弹出浏览器窗口，请在浏览器中操作后关闭或点击停止。
         </p>
 

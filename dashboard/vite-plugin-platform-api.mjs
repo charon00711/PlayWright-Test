@@ -24,6 +24,7 @@ import {
 import {
   applyAiFix,
   handleAiAnalyzeBug,
+  handleAiChat,
   handleAiFixCase,
   handleAiGenerateCase,
   handleAiStatus,
@@ -555,6 +556,18 @@ async function handleApi(req, res, urlPath) {
     const body = await parseBody(req);
     const result = await handleAiAnalyzeBug(PROJECT_ROOT, body);
     return sendJson(res, 200, result);
+  }
+
+  if (urlPath === '/api/ai/chat' && req.method === 'POST') {
+    try {
+      const body = await parseBody(req);
+      const result = await handleAiChat(PROJECT_ROOT, body);
+      return sendJson(res, 200, result);
+    } catch (e) {
+      return sendJson(res, 400, {
+        error: e instanceof Error ? e.message : String(e),
+      });
+    }
   }
 
   const perfHandled = await handlePerfApi(

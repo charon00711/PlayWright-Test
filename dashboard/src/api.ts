@@ -375,6 +375,19 @@ export async function aiAnalyzeBug(body: {
   return res.json();
 }
 
+export async function aiChat(body: {
+  message: string;
+  history?: { role: string; content: string }[];
+}): Promise<{ text: string; provider: string; model: string }> {
+  const res = await fetch('/api/ai/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return res.json();
+}
+
 export async function fetchPerfVitals(): Promise<PerfVitalsIndex> {
   try {
     const res = await fetch('/api/perf/vitals');

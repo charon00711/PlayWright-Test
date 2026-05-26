@@ -40,6 +40,31 @@ function writeSpecFile(projectRoot, specPath, specCode, fallbackCase) {
   return content;
 }
 
+export async function handleAiChat(projectRoot, body) {
+  const { message, history = [] } = body || {};
+  if (!message?.trim()) throw new Error('message 不能为空');
+
+  checkAiRateLimit('chat', 2000);
+
+  const messages = [
+    {
+      role: 'system',
+      content:
+        '你是 Playwright 测试平台的智能助手。帮助用户理解平台功能（用例管理、定时任务、AI 中心、性能、接口用例等），回答测试相关问题（Playwright、E2E、断言、调试），并能根据需求给出 Playwright spec 代码片段。回答简洁、用中文。',
+    },
+    ...(Array.isArray(history) ? history : []).slice(-10).map((m) => ({
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: String(m.content || ''),
+    })),
+    { role: 'user', content: String(message) },
+  ];
+
+  const { text, provider, model } = await chatCompletion(projectRoot, {
+    messages,
+  });
+  return { text, provider, model };
+}
+
 export function handleAiStatus(projectRoot) {
   const config = getAiConfig(projectRoot);
   return {

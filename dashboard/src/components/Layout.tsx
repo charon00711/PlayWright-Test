@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import { FloatingAiAssistant } from './FloatingAiAssistant';
 import {
   IconCases,
   IconDashboard,
@@ -53,6 +54,7 @@ export function Layout() {
       <main className="main">
         <Outlet />
       </main>
+      <FloatingAiAssistant />
     </div>
   );
 }
