@@ -1,0 +1,26 @@
+{
+  "runs": [
+    {
+      "id": "apirun-20260526-140354",
+      "startedAt": "2026-05-26T06:03:54.018Z",
+      "finishedAt": "2026-05-26T06:03:54.018Z",
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "error": 0
+      }
+    },
+    {
+      "id": "apirun-20260526-140344",
+      "startedAt": "2026-05-26T06:03:44.804Z",
+      "finishedAt": "2026-05-26T06:03:44.804Z",
+      "summary": {
+        "total": 1,
+        "passed": 0,
+        "failed": 0,
+        "error": 1
+      }
+    }
+  ]
+}

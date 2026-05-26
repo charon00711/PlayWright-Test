@@ -1,0 +1,37 @@
+{
+  "id": "vitals-20260526-135326",
+  "runId": "20260526-135326",
+  "env": "local",
+  "baseURL": "https://mail.711621.xyz/",
+  "startedAt": "2026-05-26T05:53:26.212Z",
+  "finishedAt": "2026-05-26T05:53:44.323Z",
+  "entries": [
+    {
+      "testTitle": "首页 Web Vitals",
+      "url": "https://mail.711621.xyz/",
+      "metrics": {
+        "ttfb": 169.89999985694885,
+        "domContentLoaded": 2155.4000000953674,
+        "loadEvent": 2155.5,
+        "fcp": 1528,
+        "cls": 0.00854350280761719,
+        "lcp": 3104
+      },
+      "collectedAt": "2026-05-26T05:53:42.743Z",
+      "status": "passed"
+    },
+    {
+      "testTitle": "管理页 Web Vitals",
+      "url": "https://mail.711621.xyz/html/admin",
+      "metrics": {
+        "ttfb": 167,
+        "domContentLoaded": 0,
+        "loadEvent": 0,
+        "cls": 0.012430036067962646,
+        "lcp": 964
+      },
+      "collectedAt": "2026-05-26T05:53:43.703Z",
+      "status": "passed"
+    }
+  ]
+}

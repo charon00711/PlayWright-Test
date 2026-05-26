@@ -1,0 +1,21 @@
+{
+  "id": "20260526-135147",
+  "env": "local",
+  "baseURL": "https://mail.711621.xyz/",
+  "passed": 0,
+  "failed": 1,
+  "skipped": 0,
+  "durationMs": 258,
+  "startedAt": "2026-05-26T05:51:47.487Z",
+  "finishedAt": "2026-05-26T05:51:47.745Z",
+  "tests": [
+    {
+      "title": "authenticate as admin",
+      "file": "tests/auth.setup.ts",
+      "status": "failed",
+      "durationMs": 0,
+      "error": "Error: browserType.launch: Executable doesn't exist at /Users/charon/Library/Caches/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html"
+}

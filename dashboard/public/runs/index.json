@@ -1,6 +1,39 @@
 {
   "runs": [
     {
+      "id": "20260526-142553",
+      "env": "local",
+      "baseURL": "https://mail.711621.xyz/",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 18213,
+      "startedAt": "2026-05-26T06:25:53.567Z",
+      "reportPath": "runs/20260526-142553.json"
+    },
+    {
+      "id": "20260526-135326",
+      "env": "local",
+      "baseURL": "https://mail.711621.xyz/",
+      "passed": 3,
+      "failed": 1,
+      "skipped": 0,
+      "durationMs": 18111,
+      "startedAt": "2026-05-26T05:53:26.212Z",
+      "reportPath": "runs/20260526-135326.json"
+    },
+    {
+      "id": "20260526-135147",
+      "env": "local",
+      "baseURL": "https://mail.711621.xyz/",
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0,
+      "durationMs": 258,
+      "startedAt": "2026-05-26T05:51:47.487Z",
+      "reportPath": "runs/20260526-135147.json"
+    },
+    {
       "id": "20260526-103542",
       "env": "local",
       "baseURL": "https://mail.711621.xyz/",
@@ -78,5 +111,5 @@
       "reportPath": "runs/20260525-184908.json"
     }
   ],
-  "updatedAt": "2026-05-26T02:35:59.093Z"
+  "updatedAt": "2026-05-26T06:26:11.828Z"
 }

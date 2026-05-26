@@ -1,0 +1,41 @@
+{
+  "id": "20260526-135326",
+  "env": "local",
+  "baseURL": "https://mail.711621.xyz/",
+  "passed": 3,
+  "failed": 1,
+  "skipped": 0,
+  "durationMs": 18111,
+  "startedAt": "2026-05-26T05:53:26.212Z",
+  "finishedAt": "2026-05-26T05:53:44.323Z",
+  "tests": [
+    {
+      "title": "authenticate as admin",
+      "file": "tests/auth.setup.ts",
+      "status": "passed",
+      "durationMs": 5482
+    },
+    {
+      "title": "首页 Web Vitals",
+      "file": "tests/perf/web-vitals.spec.ts",
+      "status": "passed",
+      "durationMs": 9067
+    },
+    {
+      "title": "管理页 Web Vitals",
+      "file": "tests/perf/web-vitals.spec.ts",
+      "status": "passed",
+      "durationMs": 10026
+    },
+    {
+      "title": "登录页 Web Vitals",
+      "file": "tests/perf/web-vitals.spec.ts",
+      "status": "failed",
+      "durationMs": 10601,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '登录到临时邮箱' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '登录到临时邮箱' })\u001b[22m\n",
+      "screenshot": "/Users/charon/PlayWright-Test/test-results/perf-web-vitals-Web-Vitals-perf-登录页-Web-Vitals-chromium/test-failed-1.png",
+      "video": "/Users/charon/PlayWright-Test/test-results/perf-web-vitals-Web-Vitals-perf-登录页-Web-Vitals-chromium/video.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html"
+}
