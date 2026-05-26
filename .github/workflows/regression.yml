@@ -48,6 +48,21 @@ jobs:
             *) npm run test:ci:regression ;;
           esac
 
+      - name: Copy test data into dashboard/public
+        if: always()
+        run: |
+          mkdir -p dashboard/public/runs
+          if ls reports/runs/*.json 2>/dev/null; then
+            cp reports/runs/*.json dashboard/public/runs/
+          fi
+          if [ -d playwright-report ]; then
+            cp -r playwright-report dashboard/public/
+          fi
+
+      - name: Build dashboard
+        if: always()
+        run: npm run dashboard:build
+
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
@@ -63,3 +78,45 @@ jobs:
           name: regression-reports-runs
           path: reports/runs/
           retention-days: 30
+
+  deploy-cloudflare:
+    name: 更新 Cloudflare Pages（回归结果）
+    needs: regression
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/playwright-setup
+
+      - name: Download regression run JSON
+        uses: actions/download-artifact@v4
+        with:
+          name: regression-reports-runs
+          path: reports/runs
+
+      - name: Download regression Playwright report
+        uses: actions/download-artifact@v4
+        with:
+          name: regression-playwright-report
+          path: playwright-report
+
+      - name: Copy data into dashboard/public
+        run: |
+          mkdir -p dashboard/public/runs
+          if ls reports/runs/*.json 2>/dev/null; then
+            cp reports/runs/*.json dashboard/public/runs/
+          fi
+          if [ -d playwright-report ]; then
+            cp -r playwright-report dashboard/public/
+          fi
+
+      - name: Build dashboard
+        run: npm run dashboard:build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dashboard/dist --project-name=playwright-test --commit-dirty=true

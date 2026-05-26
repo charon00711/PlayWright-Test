@@ -39,14 +39,17 @@ export async function fetchConfig(): Promise<PlatformConfig | null> {
   }
 }
 
+// import.meta.env.BASE_URL is '/' in dev and the configured base path in production builds.
+const staticBase = import.meta.env.BASE_URL;
+
 export async function fetchRunIndex(): Promise<RunIndex> {
-  const res = await fetch('/runs/index.json');
+  const res = await fetch(`${staticBase}runs/index.json`);
   if (!res.ok) return { runs: [], updatedAt: null };
   return res.json();
 }
 
 export async function fetchRunDetail(id: string): Promise<RunDetail | null> {
-  const res = await fetch(`/runs/${id}.json`);
+  const res = await fetch(`${staticBase}runs/${id}.json`);
   if (!res.ok) return null;
   return res.json();
 }

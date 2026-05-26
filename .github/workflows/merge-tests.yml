@@ -30,6 +30,17 @@ jobs:
           TEST_ENV: ci-merge
         run: npm run test:ci
 
+      - name: Copy test data into dashboard/public
+        if: always()
+        run: |
+          mkdir -p dashboard/public/runs
+          if ls reports/runs/*.json 2>/dev/null; then
+            cp reports/runs/*.json dashboard/public/runs/
+          fi
+          if [ -d playwright-report ]; then
+            cp -r playwright-report dashboard/public/
+          fi
+
       - name: Build dashboard
         if: always()
         run: npm run dashboard:build
@@ -58,31 +69,20 @@ jobs:
           path: dashboard/dist/
           retention-days: 14
 
-  deploy-dashboard:
-    name: Deploy dashboard to GitHub Pages
+  deploy-cloudflare:
+    name: 部署到 Cloudflare Pages
     needs: full-test
-    if: success()
+    if: always()
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: dashboard-dist
           path: dashboard/dist
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload to GitHub Pages
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
         with:
-          path: dashboard/dist
-
-      - name: Deploy GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dashboard/dist --project-name=playwright-test --commit-dirty=true

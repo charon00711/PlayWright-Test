@@ -4,6 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Playwright测试平台</title>
+    <script>
+      // Restore path redirected by 404.html (GitHub Pages SPA routing)
+      (function () {
+        var p = new URLSearchParams(window.location.search).get('p');
+        if (p) {
+          var q = new URLSearchParams(window.location.search).get('q');
+          var restored = '/' + p.replace(/~and~/g, '&') + (q ? '?' + q.replace(/~and~/g, '&') : '') + window.location.hash;
+          window.history.replaceState(null, '', restored);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
