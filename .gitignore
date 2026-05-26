@@ -1,0 +1,10 @@
+node_modules/
+test-results/
+playwright-report/
+.env
+.auth/
+reports/runs/*.json
+tests/recorded/*.spec.ts
+!reports/runs/.gitkeep
+dashboard/node_modules/
+dashboard/dist/

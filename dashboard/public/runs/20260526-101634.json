@@ -1,0 +1,26 @@
+{
+  "id": "20260526-101634",
+  "env": "local",
+  "baseURL": "https://mail.711621.xyz/",
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 7663,
+  "startedAt": "2026-05-26T02:16:34.964Z",
+  "finishedAt": "2026-05-26T02:16:42.627Z",
+  "tests": [
+    {
+      "title": "@regression 错误密码应显示错误提示",
+      "file": "tests/auth/login.spec.ts",
+      "status": "passed",
+      "durationMs": 4007
+    },
+    {
+      "title": "@smoke @critical admin 账号应登录成功并跳转离开登录页",
+      "file": "tests/auth/login.spec.ts",
+      "status": "passed",
+      "durationMs": 7103
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html"
+}

@@ -1,0 +1,35 @@
+{
+  "id": "20260525-184908",
+  "env": "local",
+  "baseURL": "https://mail.711621.xyz/",
+  "passed": 0,
+  "failed": 3,
+  "skipped": 0,
+  "durationMs": 307,
+  "startedAt": "2026-05-25T10:49:08.867Z",
+  "finishedAt": "2026-05-25T10:49:09.174Z",
+  "tests": [
+    {
+      "title": "authenticate as admin",
+      "file": "tests/auth.setup.ts",
+      "status": "failed",
+      "durationMs": 1,
+      "error": "Error: browserType.launch: Executable doesn't exist at /var/folders/xs/14dp0b7x19l0hwgv2cv9s8640000gn/T/cursor-sandbox-cache/b6ac2cd9ef490e5cd6d7dccf842f971b/playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+    },
+    {
+      "title": "@smoke @critical admin 账号应登录成功并跳转离开登录页",
+      "file": "tests/auth/login.spec.ts",
+      "status": "failed",
+      "durationMs": 1,
+      "error": "Error: browserType.launch: Executable doesn't exist at /var/folders/xs/14dp0b7x19l0hwgv2cv9s8640000gn/T/cursor-sandbox-cache/b6ac2cd9ef490e5cd6d7dccf842f971b/playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+    },
+    {
+      "title": "@regression 错误密码应显示错误提示",
+      "file": "tests/auth/login.spec.ts",
+      "status": "failed",
+      "durationMs": 1,
+      "error": "Error: browserType.launch: Executable doesn't exist at /var/folders/xs/14dp0b7x19l0hwgv2cv9s8640000gn/T/cursor-sandbox-cache/b6ac2cd9ef490e5cd6d7dccf842f971b/playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html"
+}

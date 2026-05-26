@@ -1,0 +1,15 @@
+{
+  "entries": [
+    {
+      "id": "hist-1779762959067",
+      "scheduleId": "daily-regression",
+      "scheduleName": "每天自动回归",
+      "startedAt": "2026-05-26T02:35:42.296Z",
+      "finishedAt": "2026-05-26T02:35:59.067Z",
+      "exitCode": 0,
+      "status": "success",
+      "trigger": "manual",
+      "output": ""
+    }
+  ]
+}

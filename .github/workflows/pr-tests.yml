@@ -1,0 +1,44 @@
+name: PR Tests
+
+on:
+  pull_request:
+    branches: [main, master]
+
+concurrency:
+  group: pr-tests-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: PR 冒烟测试 (@smoke)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/playwright-setup
+
+      - name: Run smoke tests
+        env:
+          CI: true
+          BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL || 'admin' }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD || 'admin' }}
+          TEST_ENV: ci-pr
+        run: npm run test:smoke
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-test-results-${{ github.run_id }}
+          path: test-results/
+          retention-days: 7

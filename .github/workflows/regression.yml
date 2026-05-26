@@ -1,0 +1,62 @@
+name: Regression Tests
+
+on:
+  schedule:
+    # 每天 02:00 (Asia/Shanghai) ≈ 18:00 UTC
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+    inputs:
+      grep:
+        description: '测试范围'
+        required: false
+        default: regression
+        type: choice
+        options:
+          - regression
+          - smoke
+          - all
+
+concurrency:
+  group: regression-tests
+  cancel-in-progress: false
+
+jobs:
+  regression:
+    name: 定时回归测试
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/playwright-setup
+
+      - name: Run regression tests
+        env:
+          CI: true
+          BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL || 'admin' }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD || 'admin' }}
+          TEST_ENV: ci-regression
+          REGRESSION_SCOPE: ${{ github.event.inputs.grep || 'regression' }}
+        run: |
+          case "$REGRESSION_SCOPE" in
+            smoke) npm run test:smoke ;;
+            all) npm run test:ci ;;
+            *) npm run test:ci:regression ;;
+          esac
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload run JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-reports-runs
+          path: reports/runs/
+          retention-days: 30

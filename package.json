@@ -1,0 +1,33 @@
+{
+  "name": "playwright-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "test:auth": "playwright test tests/auth",
+    "test:admin": "playwright test tests/admin",
+    "test:user-create": "playwright test tests/admin/create-user.spec.ts",
+    "test:chromium": "playwright test --project=chromium",
+    "test:ci": "playwright test && node scripts/sync-reports.mjs",
+    "test:ci:regression": "playwright test --grep @regression && node scripts/sync-reports.mjs",
+    "reports:sync": "node scripts/sync-reports.mjs",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen",
+    "install:browsers": "playwright install chromium",
+    "platform:dev": "npm run dashboard:dev",
+    "dashboard:dev": "npm run dev --prefix dashboard",
+    "dashboard:build": "npm run build --prefix dashboard",
+    "dashboard:preview": "npm run preview --prefix dashboard"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.0",
+    "dotenv": "^16.5.0",
+    "typescript": "^5.8.0"
+  }
+}

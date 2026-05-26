@@ -1,0 +1,22 @@
+{
+  "schedules": [
+    {
+      "id": "daily-regression",
+      "name": "每天自动回归",
+      "enabled": true,
+      "trigger": {
+        "type": "daily",
+        "time": "02:00"
+      },
+      "target": {
+        "mode": "grep",
+        "tag": "regression"
+      },
+      "createdAt": "2026-05-26T00:00:00.000Z",
+      "updatedAt": "2026-05-26T02:35:59.067Z",
+      "lastRunAt": "2026-05-26T02:35:42.296Z",
+      "lastRunStatus": "success",
+      "lastRunExitCode": 0
+    }
+  ]
+}

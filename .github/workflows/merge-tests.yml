@@ -1,0 +1,85 @@
+name: Merge Tests
+
+on:
+  push:
+    branches: [main, master]
+
+concurrency:
+  group: merge-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  full-test:
+    name: Merge 全量测试
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/playwright-setup
+
+      - name: Run full E2E suite
+        env:
+          CI: true
+          BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL || 'admin' }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD || 'admin' }}
+          TEST_ENV: ci-merge
+        run: npm run test:ci
+
+      - name: Build dashboard
+        if: always()
+        run: npm run dashboard:build
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: merge-playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload run JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: merge-reports-runs
+          path: reports/runs/
+          retention-days: 14
+
+      - name: Upload dashboard dist
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dashboard-dist
+          path: dashboard/dist/
+          retention-days: 14
+
+  deploy-dashboard:
+    name: Deploy dashboard to GitHub Pages
+    needs: full-test
+    if: success()
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dashboard-dist
+          path: dashboard/dist
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dashboard/dist
+
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,82 @@
+{
+  "runs": [
+    {
+      "id": "20260526-103542",
+      "env": "local",
+      "baseURL": "https://mail.711621.xyz/",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 16102,
+      "startedAt": "2026-05-26T02:35:42.952Z",
+      "reportPath": "runs/20260526-103542.json"
+    },
+    {
+      "id": "20260526-101634",
+      "env": "local",
+      "baseURL": "https://mail.711621.xyz/",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 7663,
+      "startedAt": "2026-05-26T02:16:34.964Z",
+      "reportPath": "runs/20260526-101634.json"
+    },
+    {
+      "id": "20260525-213925",
+      "env": "local",
+      "baseURL": "https://mail.711621.xyz/",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 22082,
+      "startedAt": "2026-05-25T13:39:25.734Z",
+      "reportPath": "runs/20260525-213925.json"
+    },
+    {
+      "id": "20260525-190841",
+      "env": "local",
+      "baseURL": "https://mail.711621.xyz/",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 16992,
+      "startedAt": "2026-05-25T11:08:41.865Z",
+      "reportPath": "runs/20260525-190841.json"
+    },
+    {
+      "id": "20260525-185405",
+      "env": "local",
+      "baseURL": "https://mail.711621.xyz/",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 17760,
+      "startedAt": "2026-05-25T10:54:05.200Z",
+      "reportPath": "runs/20260525-185405.json"
+    },
+    {
+      "id": "20260525-184912",
+      "env": "local",
+      "baseURL": "https://mail.711621.xyz/",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 16218,
+      "startedAt": "2026-05-25T10:49:12.475Z",
+      "reportPath": "runs/20260525-184912.json"
+    },
+    {
+      "id": "20260525-184908",
+      "env": "local",
+      "baseURL": "https://mail.711621.xyz/",
+      "passed": 0,
+      "failed": 3,
+      "skipped": 0,
+      "durationMs": 307,
+      "startedAt": "2026-05-25T10:49:08.867Z",
+      "reportPath": "runs/20260525-184908.json"
+    }
+  ],
+  "updatedAt": "2026-05-26T02:35:59.093Z"
+}
