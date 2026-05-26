@@ -8,6 +8,9 @@ concurrency:
   group: pr-tests-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   smoke:
     name: PR 冒烟测试 (@smoke)

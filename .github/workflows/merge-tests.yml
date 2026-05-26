@@ -8,6 +8,9 @@ concurrency:
   group: merge-tests-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   full-test:
     name: Merge 全量测试
@@ -73,7 +76,7 @@ jobs:
           path: dashboard/dist
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
