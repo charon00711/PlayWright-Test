@@ -3,11 +3,17 @@ import { AdminPage } from '../pages/admin.page.js';
 import { HomePage } from '../pages/home.page.js';
 import { LoginPage } from '../pages/login.page.js';
 import { appendLiveLog } from '../utils/live-log.js';
+import {
+  measureWebVitals,
+  storeVitalsForTest,
+  type WebVitalsMetrics,
+} from '../utils/perf-metrics.js';
 
 type Fixtures = {
   loginPage: LoginPage;
   homePage: HomePage;
   adminPage: AdminPage;
+  measureVitals: (url?: string) => Promise<WebVitalsMetrics>;
 };
 
 export const test = base.extend<Fixtures>({
@@ -120,6 +126,18 @@ export const test = base.extend<Fixtures>({
   },
   adminPage: async ({ page }, use) => {
     await use(new AdminPage(page));
+  },
+  measureVitals: async ({ page }, use, testInfo) => {
+    await use(async (url?: string) => {
+      const targetUrl = url ?? page.url();
+      const metrics = await measureWebVitals(page, targetUrl);
+      storeVitalsForTest(testInfo.title, targetUrl, metrics);
+      await testInfo.attach('web-vitals', {
+        body: JSON.stringify({ url: targetUrl, metrics }),
+        contentType: 'application/json',
+      });
+      return metrics;
+    });
   },
 });
 

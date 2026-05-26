@@ -1,0 +1,53 @@
+{
+  "id": "apirun-20260526-140354",
+  "startedAt": "2026-05-26T06:03:54.018Z",
+  "finishedAt": "2026-05-26T06:03:54.018Z",
+  "results": [
+    {
+      "caseId": "login-page-check",
+      "name": "登录页可访问",
+      "status": "passed",
+      "durationMs": 4864,
+      "request": {
+        "method": "GET",
+        "url": "https://mail.711621.xyz/html/login.html",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "cf-cache-status": "HIT",
+          "cf-ray": "a01a944f3c379fd4-SIN",
+          "connection": "keep-alive",
+          "content-encoding": "br",
+          "content-type": "text/html",
+          "date": "Tue, 26 May 2026 06:03:54 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=yU1difyyuEoydvcv5U3oAfFRvilM8xDuvs40qtjOmotgxF96m9UH%2BG9a84jNiJyThB2o3jWMJGsjKcoptlXgl6xPABgugCBistSP7Jp%2BN2%2BBjliVGycyJwXf5DyvpuXOLcY%3D\"}]}",
+          "server": "cloudflare",
+          "transfer-encoding": "chunked"
+        },
+        "body": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>登录 - 临时邮箱</title>\n    <style>.precheck-hide body{ visibility: hidden; }</style>\n    <script>\n      // 立即检查登录状态（在任何其他脚本之前）\n      (function(){\n        try{\n          var hasToken = document.cookie.split(';').some(function(c){ \n            return c.trim().indexOf('iding-session=') === 0; \n          });\n          \n          // 如果有cookie但是从其他页面跳转过来的，先验证有效性再跳转\n          // 避免无效cookie导致的循环跳转和页面闪现\n          if (hasToken && document.referrer) {\n            // 异步验证，不阻止页面渲染\n            (async function(){\n              try{\n                const controller = new AbortController();\n                const tid = setTimeout(function(){ try{ controller.abort(); }catch(_){ } }, 1500);\n                const r = await fetch('/api/session', { \n                  method: 'GET', \n                  headers: { 'Cache-Control': 'no-cache' },\n                  credentials: 'include',\n                  signal: controller.signal\n                });\n                clearTimeout(tid);\n                if (r && r.ok){\n                  location.replace('/');\n                } else {\n                  // cookie无效，清除它\n                  document.cookie = 'iding-session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';\n                }\n              }catch(_){ \n                // 验证失败，保持在登录页面\n              }\n            })();\n            return;\n          } else if (hasToken && !document.referrer) {\n            // 直接访问登录页且有cookie，立即重定向\n            location.replace('/');\n            return;\n          }\n          \n          // 没有cookie，做一次网络检查（可能cookie刚设置还没生效）\n          fetch('/api/session', { \n            method: 'GET', \n            headers: { 'Cache-Control': 'no-cache' },\n            credentials: 'include'\n          }).then(function(r){\n            if (r && r.ok){\n              location.replace('/');\n            }\n          }).catch(function(){ \n            // 会话检查失败，保持在登录页面\n          });\n        }catch(_){ \n          // 错误处理，保持在登录页面\n        }\n      })();\n    </script>\n    <script src=\"/js/auth-guard.js\"></script>\n    <script>\n      // 已登录访问登录页时直接回首页；登出场景跳过检查\n      (function(){\n        try{ document.documentElement.classList.add('precheck-hide'); }catch(_){ }\n        try{\n          var u = new URL(location.href);\n          var fromLogout = (u.searchParams.get('from') === 'logout') || (sessionStorage.getItem('mf:just_logged_out') === '1');\n          if (fromLogout){\n            sessionStorage.removeItem('mf:just_logged_out');\n            document.documentElement.classList.remove('precheck-hide');\n            return;\n          }\n        }catch(_){ }\n        // Cookie检查已在页面顶部执行，这里跳过重复检查\n        // 2) 网络兜底，延长超时时间减少误判\n        try{\n          var controller = new AbortController();\n          var tid = setTimeout(function(){ try{ controller.abort(); }catch(_){ } }, 1500); // 从500ms延长到1500ms\n          fetch('/api/session', { \n            headers: { 'Cache-Control': 'no-cache' }, \n            signal: controller.signal,\n            credentials: 'include'\n          })\n            .then(function(r){\n              clearTimeout(tid);\n              if (r && r.ok){ location.replace('/'); return; }\n              document.documentElement.classList.remove('precheck-hide');\n            })\n            .catch(function(){ try{ document.documentElement.classList.remove('precheck-hide'); }catch(_){ } });\n        }catch(_){ try{ document.documentElement.classList.remove('precheck-hide'); }catch(_){ } }\n        // 最长 2s 兜底显示（从1s延长到2s）\n        setTimeout(function(){ try{ document.documentElement.classList.remove('precheck-hide'); }catch(_){ } }, 2000);\n      })();\n    </script>\n    \n    <script src=\"/js/mock.js\"></script>\n    <link rel=\"icon\" href=\"favicon.svg\" type=\"image/svg+xml\" />\n    <link rel=\"shortcut icon\" href=\"favicon.svg\" type=\"image/svg+xml\" />\n\n    <!-- Google Fonts -->\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">\n\n    <link rel=\"stylesheet\" href=\"/css/login.css\" />\n    <!-- 暗黑模式样式 -->\n    <link rel=\"stylesheet\" href=\"/css/login_black.css\" />\n    <!-- 主题切换支持 -->\n    <script src=\"/js/theme-toggle.js\"></script>\n  </head>\n  <body>\n    <div class=\"bg\"></div>\n    <div class=\"center\">\n      <!-- 主题切换按钮 -->\n      <button id=\"theme-toggle\" class=\"theme-toggle-login\" aria-label=\"切换主题\" title=\"切换主题\">\n        <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <use href=\"/icons/sprites.svg#icon-moon\"/>\n        </svg>\n      </button>\n      <div class=\"card\">\n        <div class=\"logo\">\n          <svg width=\"48\" height=\"48\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n            <path d=\"M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L7.5 13.5m0 0l3 3L6 17l-1.5-3.5\"/>\n          </svg>\n        </div>\n        <h1>登录到临时邮箱</h1>\n        <div id=\"err\" class=\"err\"></div>\n        <input id=\"username\" class=\"input\" type=\"text\" placeholder=\"用户名/邮箱\" aria-label=\"用户名或邮箱地址\" />\n        <input id=\"pwd\" class=\"input\" type=\"password\" placeholder=\"密码\" aria-label=\"密码\" />\n        <div style=\"font-size:12px;color:#64748b;margin-bottom:8px\">\n          账号：guest，密码：guest，将进入观看模式。\n        </div>\n        <button id=\"login\" class=\"btn\">登录</button>\n      </div>\n    </div>\n    <div id=\"toast\" class=\"toast\"></div>\n    <script src=\"/js/toast-utils.js\"></script>\n    <script src=\"/js/login.js\"></script>\n    <script>\n      // 绑定登录页主题切换按钮\n      (function() {\n        var btn = document.getElementById('theme-toggle');\n        if (!btn) return;\n        // 同步初始图标状态\n        if (window.freemailTheme) {\n          var t = window.freemailTheme.getTheme();\n          var icon = btn.querySelector('svg use');\n          if (icon) icon.setAttribute('href', '/icons/sprites.svg#icon-' + (t === 'dark' ? 'sun' : 'moon'));\n          btn.title = t === 'dark' ? '切换到明亮模式' : '切换到暗黑模式';\n        }\n        btn.addEventListener('click', function(e) {\n          e.preventDefault();\n          if (window.freemailTheme) window.freemailTheme.toggle();\n        });\n      })();\n    </script>\n  </body>\n  </html>\n\n",
+        "durationMs": 4864
+      },
+      "assertions": [
+        {
+          "desc": "status eq 200",
+          "passed": true
+        },
+        {
+          "desc": "body contains 登录",
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "error": 0
+  }
+}

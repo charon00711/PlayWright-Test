@@ -1,0 +1,26 @@
+{
+  "id": "apirun-20260526-140344",
+  "startedAt": "2026-05-26T06:03:44.804Z",
+  "finishedAt": "2026-05-26T06:03:44.804Z",
+  "results": [
+    {
+      "caseId": "login-page-check",
+      "name": "登录页可访问",
+      "status": "error",
+      "durationMs": 10003,
+      "request": {
+        "method": "GET",
+        "url": "https://mail.711621.xyz/html/login.html",
+        "headers": {}
+      },
+      "assertions": [],
+      "error": "This operation was aborted"
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 0,
+    "error": 1
+  }
+}

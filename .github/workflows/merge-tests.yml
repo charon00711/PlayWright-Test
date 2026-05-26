@@ -30,6 +30,39 @@ jobs:
           TEST_ENV: ci-merge
         run: npm run test:ci
 
+      - name: Run Web Vitals performance tests
+        if: always()
+        env:
+          CI: true
+          BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL || 'admin' }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD || 'admin' }}
+          TEST_ENV: ci-merge
+        run: npm run test:perf || true
+
+      - name: Install k6
+        if: always()
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg \
+            --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" \
+            | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update && sudo apt-get install -y k6
+
+      - name: Run load test
+        if: always()
+        env:
+          BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          TEST_ENV: ci-merge
+          VUS: 5
+          DURATION: 20s
+        run: npm run perf:load || true
+
+      - name: Sync reports (including perf)
+        if: always()
+        run: node scripts/sync-reports.mjs
+
       - name: Copy test data into dashboard/public
         if: always()
         run: |

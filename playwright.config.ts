@@ -16,6 +16,7 @@ export default defineConfig({
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
     ['./reporters/json-reporter.ts'],
     ['./reporters/live-log-reporter.ts'],
+    ['./reporters/perf-reporter.ts'],
   ],
   use: {
     baseURL,

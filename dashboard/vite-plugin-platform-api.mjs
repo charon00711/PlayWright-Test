@@ -28,6 +28,8 @@ import {
   handleAiGenerateCase,
   handleAiStatus,
 } from './platform-lib/ai-handlers.mjs';
+import { handlePerfApi } from './platform-lib/perf-handlers.mjs';
+import { handleApiCasesApi } from './platform-lib/api-runner.mjs';
 import {
   loadEnv,
   parseBody,
@@ -554,6 +556,27 @@ async function handleApi(req, res, urlPath) {
     const result = await handleAiAnalyzeBug(PROJECT_ROOT, body);
     return sendJson(res, 200, result);
   }
+
+  const perfHandled = await handlePerfApi(
+    PROJECT_ROOT,
+    req,
+    res,
+    urlPath,
+    sendJson,
+    parseBody,
+  );
+  if (perfHandled) return;
+
+  const apiCasesHandled = await handleApiCasesApi(
+    PROJECT_ROOT,
+    req,
+    res,
+    urlPath,
+    sendJson,
+    parseBody,
+    loadEnv,
+  );
+  if (apiCasesHandled) return;
 
   return sendJson(res, 404, { error: 'Not found' });
 }

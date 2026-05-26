@@ -250,3 +250,157 @@ export type ParsedReportPreview = {
   actual: string;
   status: '通过' | '失败';
 };
+
+export type WebVitalsMetrics = {
+  lcp?: number;
+  fcp?: number;
+  cls?: number;
+  ttfb?: number;
+  tti?: number;
+  domContentLoaded?: number;
+  loadEvent?: number;
+};
+
+export type WebVitalsEntry = {
+  testTitle: string;
+  url: string;
+  metrics: WebVitalsMetrics;
+  collectedAt: string;
+  status: 'passed' | 'failed' | 'skipped';
+};
+
+export type PerfVitalsReport = {
+  id: string;
+  runId: string;
+  env: string;
+  baseURL: string;
+  startedAt: string;
+  finishedAt: string;
+  entries: WebVitalsEntry[];
+};
+
+export type PerfVitalsIndex = {
+  reports: PerfVitalsReport[];
+};
+
+export type LoadTestMetrics = {
+  rps: number;
+  p50: number;
+  p95: number;
+  p99: number;
+  avg: number;
+  min: number;
+  max: number;
+  errorRate: number;
+  totalRequests: number;
+  failedRequests: number;
+  vus: number;
+  duration: string;
+};
+
+export type LoadTestEntry = {
+  id: string;
+  startedAt: string;
+  finishedAt: string;
+  baseURL: string;
+  env: string;
+  options: { vus: number; duration: string };
+  metrics: LoadTestMetrics;
+};
+
+export type PerfLoadReport = {
+  reports: LoadTestEntry[];
+};
+
+export type PerfLoadStatus = {
+  running: boolean;
+  output: string;
+  exitCode: number | null;
+};
+
+export type KeyValuePair = {
+  key: string;
+  value: string;
+};
+
+export type ApiHttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
+export type ApiBodyType = 'none' | 'json' | 'form' | 'text';
+
+export type Assertion =
+  | { type: 'status'; op: 'eq' | 'in'; value: number | number[] }
+  | {
+      type: 'json';
+      path: string;
+      op: 'eq' | 'neq' | 'contains' | 'exists' | 'regex';
+      value?: string | number | boolean;
+    }
+  | { type: 'header'; name: string; op: 'eq' | 'contains'; value: string }
+  | { type: 'body'; op: 'contains' | 'regex'; value: string }
+  | { type: 'responseTime'; op: 'lt'; value: number };
+
+export type ApiCase = {
+  id: string;
+  name: string;
+  module: string;
+  tags: string[];
+  method: ApiHttpMethod;
+  url: string;
+  headers: KeyValuePair[];
+  query: KeyValuePair[];
+  body: string;
+  bodyType: ApiBodyType;
+  assertions: Assertion[];
+  timeoutMs?: number;
+  updatedAt: string;
+};
+
+export type ApiCasesIndex = {
+  cases: ApiCase[];
+};
+
+export type ApiAssertionResult = {
+  desc: string;
+  passed: boolean;
+  message?: string;
+};
+
+export type ApiCaseRunResult = {
+  caseId: string;
+  name: string;
+  status: 'passed' | 'failed' | 'error';
+  durationMs: number;
+  request: {
+    method: string;
+    url: string;
+    headers: Record<string, string>;
+    body?: string;
+  };
+  response?: {
+    status: number;
+    headers: Record<string, string>;
+    body: string;
+    durationMs: number;
+  };
+  assertions: ApiAssertionResult[];
+  error?: string;
+};
+
+export type ApiRunResult = {
+  id: string;
+  startedAt: string;
+  finishedAt: string;
+  results: ApiCaseRunResult[];
+  summary: { total: number; passed: number; failed: number; error: number };
+};
+
+export type ApiRunSummary = {
+  id: string;
+  startedAt: string;
+  finishedAt: string;
+  summary: ApiRunResult['summary'];
+};
+
+export type ApiRunsIndex = {
+  runs: ApiRunSummary[];
+};

@@ -1,6 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import {
-  IconApi,
   IconCases,
   IconDashboard,
   IconImport,
@@ -10,18 +9,21 @@ import {
   IconSchedule,
   IconLiveLog,
   IconAi,
+  IconPerf,
+  IconApiCase,
 } from './NavIcons';
 
 const navItems = [
   { to: '/', end: true, label: '仪表盘', Icon: IconDashboard },
   { to: '/recorder', label: '录制测试', Icon: IconRecorder },
   { to: '/cases', label: '测试用例', Icon: IconCases },
+  { to: '/api-cases', label: '接口用例', Icon: IconApiCase },
   { to: '/import', label: 'Markdown 导入', Icon: IconImport },
   { to: '/reports', label: '测试报告', Icon: IconReports },
   { to: '/scheduler', label: '定时中心', Icon: IconSchedule },
   { to: '/live-logs', label: '实时日志', Icon: IconLiveLog },
   { to: '/ai', label: 'AI 中心', Icon: IconAi },
-  { to: '/api-debug', label: '接口请求', Icon: IconApi },
+  { to: '/perf', label: '性能中心', Icon: IconPerf },
 ];
 
 export function Layout() {

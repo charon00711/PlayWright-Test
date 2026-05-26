@@ -18,6 +18,14 @@ import type {
   AiFixCaseResult,
   AiBugAnalysisResult,
   TestCase,
+  PerfVitalsIndex,
+  PerfLoadReport,
+  PerfLoadStatus,
+  ApiCase,
+  ApiCasesIndex,
+  ApiRunResult,
+  ApiRunsIndex,
+  ApiCaseRunResult,
 } from './types';
 
 export async function checkApiHealth(): Promise<boolean> {
@@ -364,5 +372,143 @@ export async function aiAnalyzeBug(body: {
     body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error(await readApiError(res));
+  return res.json();
+}
+
+export async function fetchPerfVitals(): Promise<PerfVitalsIndex> {
+  try {
+    const res = await fetch('/api/perf/vitals');
+    if (res.ok) return res.json();
+  } catch {
+    /* fallback to static */
+  }
+  const res = await fetch(`${staticBase}perf/vitals-index.json`);
+  if (!res.ok) return { reports: [] };
+  return res.json();
+}
+
+export async function fetchPerfLoad(): Promise<PerfLoadReport> {
+  try {
+    const res = await fetch('/api/perf/load');
+    if (res.ok) return res.json();
+  } catch {
+    /* fallback to static */
+  }
+  const res = await fetch(`${staticBase}perf/load-index.json`);
+  if (!res.ok) return { reports: [] };
+  return res.json();
+}
+
+export async function fetchPerfLoadStatus(): Promise<PerfLoadStatus | null> {
+  try {
+    const res = await fetch('/api/perf/load/status');
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function triggerLoadTest(body?: {
+  vus?: number;
+  duration?: string;
+  baseURL?: string;
+}): Promise<void> {
+  const res = await fetch('/api/perf/load/run', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body ?? {}),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+}
+
+export async function fetchApiCases(): Promise<ApiCasesIndex> {
+  try {
+    const res = await fetch('/api/api-cases');
+    if (res.ok) return res.json();
+  } catch {
+    /* fallback */
+  }
+  const res = await fetch(`${staticBase}api-cases.json`);
+  if (!res.ok) return { cases: [] };
+  return res.json();
+}
+
+export async function fetchApiCase(id: string): Promise<ApiCase | null> {
+  const res = await fetch(`/api/api-cases/${id}`);
+  if (!res.ok) return null;
+  return res.json();
+}
+
+export async function createApiCase(
+  body: Partial<ApiCase> & { name: string },
+): Promise<ApiCase> {
+  const res = await fetch('/api/api-cases', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return res.json();
+}
+
+export async function updateApiCase(
+  id: string,
+  body: Partial<ApiCase>,
+): Promise<ApiCase> {
+  const res = await fetch(`/api/api-cases/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return res.json();
+}
+
+export async function deleteApiCase(id: string): Promise<void> {
+  const res = await fetch(`/api/api-cases/${id}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error(await readApiError(res));
+}
+
+export async function runApiCase(id: string): Promise<ApiRunResult> {
+  const res = await fetch(`/api/api-cases/${id}/run`, { method: 'POST' });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return res.json();
+}
+
+export async function runApiCasesBatch(opts?: {
+  ids?: string[];
+  tag?: string;
+}): Promise<ApiRunResult> {
+  const res = await fetch('/api/api-cases/run', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(opts ?? {}),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return res.json();
+}
+
+export async function debugApiCase(
+  body: Partial<ApiCase>,
+): Promise<ApiCaseRunResult> {
+  const res = await fetch('/api/api-cases/debug', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return res.json();
+}
+
+export async function fetchApiRuns(): Promise<ApiRunsIndex> {
+  try {
+    const res = await fetch('/api/api-cases/runs');
+    if (res.ok) return res.json();
+  } catch {
+    /* fallback */
+  }
+  const res = await fetch(`${staticBase}api-runs/index.json`);
+  if (!res.ok) return { runs: [] };
   return res.json();
 }

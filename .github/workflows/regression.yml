@@ -48,6 +48,39 @@ jobs:
             *) npm run test:ci:regression ;;
           esac
 
+      - name: Run Web Vitals performance tests
+        if: always()
+        env:
+          CI: true
+          BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL || 'admin' }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD || 'admin' }}
+          TEST_ENV: ci-regression
+        run: npm run test:perf || true
+
+      - name: Install k6
+        if: always()
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg \
+            --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" \
+            | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update && sudo apt-get install -y k6
+
+      - name: Run load test
+        if: always()
+        env:
+          BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          TEST_ENV: ci-regression
+          VUS: 5
+          DURATION: 20s
+        run: npm run perf:load || true
+
+      - name: Sync reports (including perf)
+        if: always()
+        run: node scripts/sync-reports.mjs
+
       - name: Copy test data into dashboard/public
         if: always()
         run: |
@@ -79,40 +112,24 @@ jobs:
           path: reports/runs/
           retention-days: 30
 
+      - name: Upload dashboard dist
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-dashboard-dist
+          path: dashboard/dist/
+          retention-days: 30
+
   deploy-cloudflare:
     name: 更新 Cloudflare Pages（回归结果）
     needs: regression
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: ./.github/actions/playwright-setup
-
-      - name: Download regression run JSON
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
-          name: regression-reports-runs
-          path: reports/runs
-
-      - name: Download regression Playwright report
-        uses: actions/download-artifact@v4
-        with:
-          name: regression-playwright-report
-          path: playwright-report
-
-      - name: Copy data into dashboard/public
-        run: |
-          mkdir -p dashboard/public/runs
-          if ls reports/runs/*.json 2>/dev/null; then
-            cp reports/runs/*.json dashboard/public/runs/
-          fi
-          if [ -d playwright-report ]; then
-            cp -r playwright-report dashboard/public/
-          fi
-
-      - name: Build dashboard
-        run: npm run dashboard:build
+          name: regression-dashboard-dist
+          path: dashboard/dist
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3

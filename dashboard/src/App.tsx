@@ -6,9 +6,13 @@ import { Dashboard } from './pages/Dashboard';
 import { ImportMarkdown } from './pages/ImportMarkdown';
 import { Recorder } from './pages/Recorder';
 import { ApiDebug } from './pages/ApiDebug';
+import { ApiCasesList } from './pages/ApiCasesList';
+import { ApiCaseForm } from './pages/ApiCaseForm';
+import { ApiRunsList } from './pages/ApiRunsList';
 import { ScheduleCenter } from './pages/ScheduleCenter';
 import { LiveLogs } from './pages/LiveLogs';
 import { AiCenter } from './pages/AiCenter';
+import { PerfCenter } from './pages/PerfCenter';
 import { Reports } from './pages/Reports';
 import { ReportsRunDetail } from './pages/ReportsRunDetail';
 
@@ -33,6 +37,11 @@ export function App() {
           <Route path="scheduler" element={<ScheduleCenter />} />
           <Route path="live-logs" element={<LiveLogs />} />
           <Route path="ai" element={<AiCenter />} />
+          <Route path="perf" element={<PerfCenter />} />
+          <Route path="api-cases" element={<ApiCasesList />} />
+          <Route path="api-cases/new" element={<ApiCaseForm />} />
+          <Route path="api-cases/runs" element={<ApiRunsList />} />
+          <Route path="api-cases/:id/edit" element={<ApiCaseForm />} />
           <Route path="api-debug" element={<ApiDebug />} />
           <Route path="runs" element={<Navigate to="/reports" replace />} />
           <Route path="runs/:runId" element={<LegacyRunRedirect />} />
