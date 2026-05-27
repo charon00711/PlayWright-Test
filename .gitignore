@@ -8,3 +8,9 @@ tests/recorded/*.spec.ts
 !reports/runs/.gitkeep
 dashboard/node_modules/
 dashboard/dist/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example

@@ -25,12 +25,15 @@
     "platform:server": "node scripts/platform-server.mjs",
     "dashboard:dev": "npm run dev --prefix dashboard",
     "dashboard:build": "npm run build --prefix dashboard",
-    "dashboard:preview": "npm run preview --prefix dashboard"
+    "dashboard:preview": "npm run preview --prefix dashboard",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",
     "@types/node": "^22.15.0",
     "dotenv": "^16.5.0",
-    "typescript": "^5.8.0"
+    "typescript": "^5.8.0",
+    "wrangler": "^4.94.0"
   }
 }
