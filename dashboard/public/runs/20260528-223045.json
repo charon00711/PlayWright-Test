@@ -1,0 +1,40 @@
+{
+  "id": "20260528-223045",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 0,
+  "failed": 1,
+  "skipped": 0,
+  "durationMs": 21976,
+  "startedAt": "2026-05-28T14:30:45.289Z",
+  "finishedAt": "2026-05-28T14:31:07.265Z",
+  "tests": [
+    {
+      "title": "authenticate as admin",
+      "file": "tests/auth.setup.ts",
+      "module": "other",
+      "status": "failed",
+      "durationMs": 21547,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '登录到临时邮箱' })\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '登录到临时邮箱' })\u001b[22m\n",
+      "screenshot": "/Users/charon/PlayWright-Test/test-results/auth.setup.ts-authenticate-as-admin-setup/test-failed-1.png",
+      "video": "/Users/charon/PlayWright-Test/test-results/auth.setup.ts-authenticate-as-admin-setup/video.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "type": "business",
+      "caseName": "authenticate as admin",
+      "steps": [
+        "执行 Playwright 用例：authenticate as admin"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行失败：Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '登录到临时邮箱' })\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '登录到临时邮箱' })\u001b[22m\n",
+      "status": "失败",
+      "durationMs": 21547,
+      "executedAt": "2026-05-28T14:31:07.265Z",
+      "runId": "20260528-223045",
+      "source": "tests/auth.setup.ts"
+    }
+  ]
+}

@@ -38,9 +38,25 @@ function TestRow({
             截图
           </a>
         )}
-        {test.status === 'failed' && apiAvailable && (
+        {test.videoPublic && (
           <>
             {test.screenshotPublic && ' · '}
+            <a href={platformAssetUrl(test.videoPublic)} target="_blank" rel="noreferrer">
+              视频
+            </a>
+          </>
+        )}
+        {test.tracePublic && (
+          <>
+            {(test.screenshotPublic || test.videoPublic) && ' · '}
+            <a href={platformAssetUrl(test.tracePublic)} target="_blank" rel="noreferrer">
+              Trace
+            </a>
+          </>
+        )}
+        {test.status === 'failed' && apiAvailable && (
+          <>
+            {(test.screenshotPublic || test.videoPublic || test.tracePublic) && ' · '}
             <button
               type="button"
               className="link-btn"
@@ -216,18 +232,6 @@ export function ReportsRunDetail() {
           </tbody>
         </table>
 
-        {run.tests
-          .filter((t) => t.screenshotPublic)
-          .map((t, i) => (
-            <div key={i} style={{ marginTop: '1rem' }}>
-              <strong>{t.title}</strong>
-              <img
-                className="screenshot"
-                src={platformAssetUrl(t.screenshotPublic ?? '')}
-                alt={t.title}
-              />
-            </div>
-          ))}
       </div>
 
       {run.businessReports && run.businessReports.length > 0 && (

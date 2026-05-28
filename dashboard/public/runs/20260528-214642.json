@@ -1,0 +1,13 @@
+{
+  "id": "20260528-214642",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 0,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 6,
+  "startedAt": "2026-05-28T13:46:42.197Z",
+  "finishedAt": "2026-05-28T13:46:42.203Z",
+  "tests": [],
+  "playwrightReport": "playwright-report/index.html"
+}

@@ -1,27 +1,45 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { deleteCase, fetchCases, fetchRunJobStatus, startRun } from '../api';
+import {
+  deleteCase,
+  fetchCaseRunMap,
+  fetchCases,
+  fetchRunJobStatus,
+  startRun,
+} from '../api';
 import { ApiBanner } from '../components/ApiBanner';
 import { IconPlay } from '../components/NavIcons';
 import { useApiHealth } from '../hooks/useApiHealth';
-import type { TestCase } from '../types';
+import { useToast } from '../hooks/useToast';
+import type { CaseRunMap, RunStatus, TestCase } from '../types';
+
+const POLL_MS_RUNNING = 500;
 
 export function CasesList() {
   const navigate = useNavigate();
+  const toast = useToast();
   const apiAvailable = useApiHealth();
   const [cases, setCases] = useState<TestCase[]>([]);
+  const [caseRunMap, setCaseRunMap] = useState<CaseRunMap>({});
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState(false);
   const [runningSpec, setRunningSpec] = useState<string | null>(null);
   const [logOutput, setLogOutput] = useState('');
   const [exitCode, setExitCode] = useState<number | null>(null);
+  const [lastRunId, setLastRunId] = useState<string | null>(null);
   const [logExpanded, setLogExpanded] = useState(true);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const finalToastShownRef = useRef(false);
+  const logRef = useRef<HTMLPreElement>(null);
 
-  function reload() {
-    fetchCases()
-      .then((c) => setCases(c.cases))
-      .finally(() => setLoading(false));
+  async function reload() {
+    const [casesData, runMap] = await Promise.all([
+      fetchCases(),
+      fetchCaseRunMap(),
+    ]);
+    setCases(casesData.cases);
+    setCaseRunMap(runMap);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -31,34 +49,82 @@ export function CasesList() {
     };
   }, []);
 
-  function startPolling() {
+  useEffect(() => {
+    if (logRef.current && logExpanded) {
+      logRef.current.scrollTop = logRef.current.scrollHeight;
+    }
+  }, [logOutput, logExpanded]);
+
+  function refreshRunMapForSpec(specPath: string, runId: string, st: RunStatus) {
+    setCaseRunMap((prev) => ({
+      ...prev,
+      [specPath]: {
+        runId,
+        passed: st.exitCode === 0 ? 1 : 0,
+        failed: st.exitCode === 0 ? 0 : 1,
+        skipped: 0,
+        startedAt: new Date().toISOString(),
+      },
+    }));
+  }
+
+  function startPolling(specPath: string | null) {
     if (pollRef.current) clearInterval(pollRef.current);
-    pollRef.current = setInterval(async () => {
+    finalToastShownRef.current = false;
+    const poll = async () => {
       const st = await fetchRunJobStatus();
       setLogOutput(st.output);
+      if (st.lastRunId) setLastRunId(st.lastRunId);
       if (!st.running) {
         if (pollRef.current) clearInterval(pollRef.current);
         pollRef.current = null;
         setRunning(false);
         setRunningSpec(null);
         setExitCode(st.exitCode);
+        await reload();
+        if (st.lastRunId && specPath) {
+          refreshRunMapForSpec(specPath, st.lastRunId, st);
+        }
+        if (!finalToastShownRef.current) {
+          finalToastShownRef.current = true;
+          if (st.exitCode === 0) {
+            toast.showSuccess(
+              st.lastRunId
+                ? `测试通过。报告 ID: ${st.lastRunId}`
+                : '测试通过',
+            );
+          } else {
+            toast.showError(
+              st.lastRunId
+                ? `测试失败（退出码 ${st.exitCode ?? 1}）。报告 ID: ${st.lastRunId}`
+                : `测试失败，退出码 ${st.exitCode ?? 1}`,
+            );
+          }
+        }
       }
-    }, 1500);
+    };
+    void poll();
+    pollRef.current = setInterval(poll, POLL_MS_RUNNING);
   }
 
   async function handleRunAll() {
     if (!apiAvailable || running) return;
+    const specPaths = cases.map((c) => c.specPath);
+    if (specPaths.length === 0) return;
     setRunning(true);
     setRunningSpec(null);
     setLogOutput('');
     setExitCode(null);
+    setLastRunId(null);
     setLogExpanded(true);
     try {
-      await startRun({ all: true });
-      startPolling();
+      await startRun({ specPaths });
+      startPolling(null);
     } catch (e) {
       setRunning(false);
-      setLogOutput(e instanceof Error ? e.message : String(e));
+      const msg = e instanceof Error ? e.message : String(e);
+      setLogOutput(msg);
+      toast.showError(`启动失败：${msg}`);
     }
   }
 
@@ -68,21 +134,31 @@ export function CasesList() {
     setRunningSpec(specPath);
     setLogOutput('');
     setExitCode(null);
+    setLastRunId(null);
     setLogExpanded(true);
     try {
       await startRun({ specPath });
-      startPolling();
+      startPolling(specPath);
     } catch (e) {
       setRunning(false);
       setRunningSpec(null);
-      setLogOutput(e instanceof Error ? e.message : String(e));
+      const msg = e instanceof Error ? e.message : String(e);
+      setLogOutput(msg);
+      toast.showError(`启动失败：${msg}`);
     }
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm('确定删除该用例及 spec 文件？')) return;
-    await deleteCase(id);
-    reload();
+  async function handleDelete(id: string, title: string) {
+    if (!confirm(`确定删除用例「${title}」及 spec 文件？`)) return;
+    try {
+      await deleteCase(id);
+      toast.showSuccess(`已删除用例：${title}`);
+      await reload();
+    } catch (e) {
+      toast.showError(
+        `删除失败：${e instanceof Error ? e.message : String(e)}`,
+      );
+    }
   }
 
   if (loading) return <p>加载中…</p>;
@@ -90,13 +166,13 @@ export function CasesList() {
   return (
     <div>
       <div className="page-header">
-        <h2>测试用例</h2>
+        <h2>用例管理</h2>
         <div className="btn-row" style={{ marginTop: 0 }}>
           <button
             type="button"
             className="btn"
             disabled={!apiAvailable || running || cases.length === 0}
-            onClick={handleRunAll}
+            onClick={() => void handleRunAll()}
           >
             {running && !runningSpec ? (
               <span className="btn-with-icon">
@@ -137,6 +213,7 @@ export function CasesList() {
             <tbody>
               {cases.map((c) => {
                 const isRunningThis = running && runningSpec === c.specPath;
+                const runInfo = caseRunMap[c.specPath];
                 return (
                   <tr key={c.id}>
                     <td>{c.title}</td>
@@ -157,7 +234,7 @@ export function CasesList() {
                           type="button"
                           className="btn btn-sm btn-run"
                           disabled={running}
-                          onClick={() => handleRunOne(c.specPath)}
+                          onClick={() => void handleRunOne(c.specPath)}
                           title="执行此用例"
                         >
                           {isRunningThis ? (
@@ -168,7 +245,25 @@ export function CasesList() {
                           执行
                         </button>
                       )}
-                      <Link to={`/cases/${c.id}/edit`}>编辑</Link>
+                      {runInfo ? (
+                        <Link
+                          to={`/reports/runs/${runInfo.runId}`}
+                          className="btn btn-sm"
+                          title={`最近运行：${runInfo.passed} 通过 / ${runInfo.failed} 失败`}
+                        >
+                          报告
+                        </Link>
+                      ) : (
+                        <span
+                          className="btn btn-sm muted-btn"
+                          title="该用例暂无运行记录"
+                        >
+                          报告
+                        </span>
+                      )}
+                      <Link to={`/cases/${encodeURIComponent(c.id)}/edit`}>
+                        编辑
+                      </Link>
                       {apiAvailable && (
                         <>
                           {' · '}
@@ -181,7 +276,7 @@ export function CasesList() {
                           <button
                             type="button"
                             className="link-btn"
-                            onClick={() => handleDelete(c.id)}
+                            onClick={() => void handleDelete(c.id, c.title)}
                           >
                             删除
                           </button>
@@ -210,9 +305,20 @@ export function CasesList() {
                 退出码 {exitCode}
               </span>
             )}
+            {!running && lastRunId && (
+              <Link
+                to={`/reports/runs/${lastRunId}`}
+                className="log-report-link"
+                onClick={(e) => e.stopPropagation()}
+              >
+                查看测试报告 →
+              </Link>
+            )}
           </button>
           {logExpanded && (
-            <pre className="log-panel">{logOutput || '等待输出…'}</pre>
+            <pre ref={logRef} className="log-panel log-panel-tall">
+              {logOutput || '等待输出…'}
+            </pre>
           )}
         </div>
       )}

@@ -1,0 +1,23 @@
+{
+  "id": "20260528-205815",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 0,
+  "failed": 1,
+  "skipped": 0,
+  "durationMs": 18793,
+  "startedAt": "2026-05-28T12:58:15.022Z",
+  "finishedAt": "2026-05-28T12:58:33.815Z",
+  "tests": [
+    {
+      "title": "authenticate as admin",
+      "file": "tests/auth.setup.ts",
+      "status": "failed",
+      "durationMs": 18405,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '登录到临时邮箱' })\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '登录到临时邮箱' })\u001b[22m\n",
+      "screenshot": "/Users/charon/PlayWright-Test/test-results/auth.setup.ts-authenticate-as-admin-setup/test-failed-1.png",
+      "video": "/Users/charon/PlayWright-Test/test-results/auth.setup.ts-authenticate-as-admin-setup/video.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html"
+}

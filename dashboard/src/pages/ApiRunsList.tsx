@@ -36,7 +36,7 @@ export function ApiRunsList() {
   return (
     <div className="page api-runs-page">
       <p>
-        <Link to="/api-cases">← 接口用例列表</Link>
+        <Link to="/api-cases">← 接口管理</Link>
       </p>
       <h2>接口运行历史</h2>
 

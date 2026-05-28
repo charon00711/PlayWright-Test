@@ -1,0 +1,52 @@
+{
+  "id": "20260526-151442",
+  "env": "local",
+  "baseURL": "https://mail.711621.xyz/",
+  "passed": 3,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 27141,
+  "startedAt": "2026-05-26T07:14:42.059Z",
+  "finishedAt": "2026-05-26T07:15:09.200Z",
+  "tests": [
+    {
+      "title": "authenticate as admin",
+      "file": "tests/auth.setup.ts",
+      "status": "passed",
+      "durationMs": 9872
+    },
+    {
+      "title": "@smoke @critical admin 账号应登录成功并跳转离开登录页",
+      "file": "tests/auth/login.spec.ts",
+      "status": "passed",
+      "durationMs": 11671
+    },
+    {
+      "title": "@smoke @critical @regression 账号密码登录 → 用户管理 → 创建 bill01 普通用户 → 创建成功",
+      "file": "tests/admin/create-user.spec.ts",
+      "status": "passed",
+      "durationMs": 14490
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "caseName": "账号密码登录并创建普通用户 bill01",
+      "steps": [
+        "使用 storageState 已登录 admin，进入首页",
+        "点击「用户管理」",
+        "点击「创建用户」",
+        "填写用户名 bill01、密码 bill01、角色 普通用户",
+        "点击「创建」按钮",
+        "验证创建成功提示与用户列表"
+      ],
+      "expected": "登录成功；进入用户管理；创建用户 bill01/bill01（普通用户）后提示「用户创建成功」，列表可见 bill01。",
+      "actual": "已登录，进入邮箱管理首页。\n已进入用户管理页面。\nToast 显示「用户创建成功」，用户列表包含 bill01。",
+      "status": "通过",
+      "durationMs": 4950,
+      "executedAt": "2026/5/26 15:15:08",
+      "runId": "20260526-151442",
+      "type": "business"
+    }
+  ]
+}

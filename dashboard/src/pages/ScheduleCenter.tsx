@@ -12,6 +12,7 @@ import {
 import { ApiBanner } from '../components/ApiBanner';
 import { IconPlay } from '../components/NavIcons';
 import { useApiHealth } from '../hooks/useApiHealth';
+import { useToast } from '../hooks/useToast';
 import type {
   Schedule,
   ScheduleHistoryEntry,
@@ -52,7 +53,7 @@ function triggerLabel(trigger: ScheduleTrigger, cronExpression?: string | null) 
 }
 
 function targetLabel(target: ScheduleTarget) {
-  if (target.mode === 'all') return '全部用例 (test:ci)';
+  if (target.mode === 'all') return '平台全部用例';
   if (target.mode === 'grep') {
     return target.tag === 'smoke' ? '冒烟 @smoke' : '回归 @regression';
   }
@@ -74,6 +75,7 @@ function historyStatusBadge(entry: ScheduleHistoryEntry) {
 
 export function ScheduleCenter() {
   const apiAvailable = useApiHealth();
+  const toast = useToast();
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [history, setHistory] = useState<ScheduleHistoryEntry[]>([]);
   const [timezone, setTimezone] = useState('Asia/Shanghai');
@@ -177,36 +179,56 @@ export function ScheduleCenter() {
       const payload = buildPayload();
       if (editingId) {
         await updateSchedule(editingId, payload);
+        toast.showSuccess('定时任务已更新');
       } else {
         await createSchedule(payload);
+        toast.showSuccess('定时任务已创建');
       }
       setShowForm(false);
       await reload();
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg);
+      toast.showError(`保存失败：${msg}`);
     } finally {
       setSaving(false);
     }
   }
 
   async function handleToggle(schedule: Schedule) {
-    await updateSchedule(schedule.id, { enabled: !schedule.enabled });
-    await reload();
+    try {
+      await updateSchedule(schedule.id, { enabled: !schedule.enabled });
+      toast.showSuccess(schedule.enabled ? '已停用定时任务' : '已启用定时任务');
+      await reload();
+    } catch (err) {
+      toast.showError(
+        `操作失败：${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
   }
 
   async function handleDelete(id: string) {
     if (!confirm('确定删除该定时任务？')) return;
-    await deleteSchedule(id);
-    await reload();
+    try {
+      await deleteSchedule(id);
+      toast.showSuccess('定时任务已删除');
+      await reload();
+    } catch (err) {
+      toast.showError(
+        `删除失败：${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
   }
 
   async function handleRunNow(id: string) {
     setRunningId(id);
     try {
       await runScheduleNow(id);
+      toast.showSuccess('定时任务已触发执行');
       await reload();
     } catch (err) {
-      alert(err instanceof Error ? err.message : String(err));
+      const msg = err instanceof Error ? err.message : String(err);
+      toast.showError(`执行失败：${msg}`);
     } finally {
       setRunningId(null);
     }

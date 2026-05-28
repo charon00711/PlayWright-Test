@@ -117,6 +117,10 @@ export const test = base.extend<Fixtures>({
     });
 
     await use(page);
+    const videoSettleMs = Number(process.env.PW_VIDEO_SETTLE_MS ?? 0);
+    if (videoSettleMs > 0 && !page.isClosed()) {
+      await page.waitForTimeout(videoSettleMs).catch(() => {});
+    }
   },
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));

@@ -5,6 +5,7 @@ import type {
   RecordStatus,
   RunDetail,
   RunIndex,
+  CaseRunMap,
   RunStatus,
   Schedule,
   ScheduleHistory,
@@ -21,6 +22,7 @@ import type {
   PerfVitalsIndex,
   PerfLoadReport,
   PerfLoadStatus,
+  PerfVitalsStatus,
   ApiCase,
   ApiCasesIndex,
   ApiRunResult,
@@ -98,8 +100,12 @@ export async function fetchCases(): Promise<CasesIndex> {
   }
 }
 
+function caseApiPath(id: string) {
+  return `/api/cases/${encodeURIComponent(id)}`;
+}
+
 export async function fetchCase(id: string): Promise<TestCase | null> {
-  const res = await fetch(`/api/cases/${id}`);
+  const res = await fetch(caseApiPath(id));
   if (!res.ok) return null;
   return res.json();
 }
@@ -120,7 +126,7 @@ export async function updateCase(
   id: string,
   body: Partial<TestCase> & { regenerateSpec?: boolean },
 ): Promise<TestCase> {
-  const res = await fetch(`/api/cases/${id}`, {
+  const res = await fetch(caseApiPath(id), {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -130,7 +136,7 @@ export async function updateCase(
 }
 
 export async function deleteCase(id: string): Promise<void> {
-  const res = await fetch(`/api/cases/${id}`, { method: 'DELETE' });
+  const res = await fetch(caseApiPath(id), { method: 'DELETE' });
   if (!res.ok) throw new Error(await res.text());
 }
 
@@ -184,10 +190,12 @@ export async function registerRecordedCase(body: {
 export async function startRun(opts?: {
   grep?: 'smoke' | 'regression';
   specPath?: string;
+  specPaths?: string[];
   all?: boolean;
 }): Promise<void> {
   let payload: Record<string, unknown> = { grep: 'smoke' };
   if (opts?.all) payload = {};
+  else if (opts?.specPaths) payload = { specPaths: opts.specPaths };
   else if (opts?.specPath) payload = { specPath: opts.specPath };
   else if (opts?.grep) payload = { grep: opts.grep };
 
@@ -201,8 +209,21 @@ export async function startRun(opts?: {
 
 export async function fetchRunJobStatus(): Promise<RunStatus> {
   const res = await fetch('/api/run/status');
-  if (!res.ok) return { running: false, output: '', exitCode: null };
+  if (!res.ok) {
+    return { running: false, output: '', exitCode: null, lastRunId: null };
+  }
   return res.json();
+}
+
+export async function fetchCaseRunMap(): Promise<CaseRunMap> {
+  try {
+    const res = await fetch('/api/runs/case-map');
+    if (!res.ok) return {};
+    const data = await res.json();
+    return data.map ?? {};
+  } catch {
+    return {};
+  }
 }
 
 export async function fetchBusinessReports(): Promise<{
@@ -454,6 +475,27 @@ export async function triggerLoadTest(body?: {
   baseURL?: string;
 }): Promise<void> {
   const res = await fetch('/api/perf/load/run', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body ?? {}),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+}
+
+export async function fetchPerfVitalsStatus(): Promise<PerfVitalsStatus | null> {
+  try {
+    const res = await fetch('/api/perf/vitals/status');
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function triggerVitalsCollection(body?: {
+  baseURL?: string;
+}): Promise<void> {
+  const res = await fetch('/api/perf/vitals/run', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body ?? {}),

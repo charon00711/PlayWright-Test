@@ -1,0 +1,115 @@
+{
+  "id": "20260528-231402",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 4,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 39933,
+  "startedAt": "2026-05-28T15:14:02.020Z",
+  "finishedAt": "2026-05-28T15:14:41.953Z",
+  "tests": [
+    {
+      "title": "@regression 注册登录用例",
+      "file": "tests/auth/wellcoin注册登录用例-02sn.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 5511,
+      "video": "/Users/charon/PlayWright-Test/test-results/auth-wellcoin注册登录用例-02sn-注册登录用例-regression-注册登录用例-chromium-guest/video.webm"
+    },
+    {
+      "title": "test",
+      "file": "tests/recorded/rec-1779980730796.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 15816,
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779980730796-test-chromium-guest/video.webm"
+    },
+    {
+      "title": "@regression 充值功能",
+      "file": "tests/smoke/充值功能-a8aw.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 9043,
+      "video": "/Users/charon/PlayWright-Test/test-results/smoke-充值功能-a8aw-充值功能-regression-充值功能-chromium-guest/video.webm"
+    },
+    {
+      "title": "@regression 划转功能",
+      "file": "tests/smoke/划转功能-lzmd.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 9041,
+      "video": "/Users/charon/PlayWright-Test/test-results/smoke-划转功能-lzmd-划转功能-regression-划转功能-chromium-guest/video.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "type": "business",
+      "caseName": "注册登录用例",
+      "steps": [
+        "1、在页面中点击立即注册按钮",
+        "2、输入邮箱：test@gmail.com",
+        "3、输入密码：123456",
+        "4、点击注册并登录按钮"
+      ],
+      "expected": "注册并登录成功",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 5511,
+      "executedAt": "2026-05-28T15:14:41.953Z",
+      "runId": "20260528-231402",
+      "source": "tests/auth/wellcoin注册登录用例-02sn.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "充值划转现货合约交易",
+      "steps": [
+        "见录制脚本"
+      ],
+      "expected": "待补充",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 15816,
+      "executedAt": "2026-05-28T15:14:41.953Z",
+      "runId": "20260528-231402",
+      "source": "tests/recorded/rec-1779980730796.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "充值功能",
+      "steps": [
+        "1、调用下wellcoin注册登录用例",
+        "2、点击资产",
+        "3、模拟充值：选择usdt，金额：10000",
+        "4、点击确认充值按钮"
+      ],
+      "expected": "充值成功",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 9043,
+      "executedAt": "2026-05-28T15:14:41.953Z",
+      "runId": "20260528-231402",
+      "source": "tests/smoke/充值功能-a8aw.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "划转功能",
+      "steps": [
+        "1、调用下wellcoin注册登录用例",
+        "2、点击资产",
+        "3、模拟充值：选择usdt，金额：10000",
+        "4、点击确认充值按钮",
+        "5、资产划转：选择usdt，金额：1000",
+        "6、点击确认划转按钮"
+      ],
+      "expected": "划转成功",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 9041,
+      "executedAt": "2026-05-28T15:14:41.953Z",
+      "runId": "20260528-231402",
+      "source": "tests/smoke/划转功能-lzmd.spec.ts"
+    }
+  ]
+}

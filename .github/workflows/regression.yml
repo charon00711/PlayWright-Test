@@ -36,7 +36,7 @@ jobs:
       - name: Run regression tests
         env:
           CI: true
-          BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          BASE_URL: ${{ secrets.BASE_URL || 'https://wellcoin.711621.xyz/' }}
           TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL || 'admin' }}
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD || 'admin' }}
           TEST_ENV: ci-regression
@@ -52,7 +52,7 @@ jobs:
         if: always()
         env:
           CI: true
-          BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          BASE_URL: ${{ secrets.BASE_URL || 'https://wellcoin.711621.xyz/' }}
           TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL || 'admin' }}
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD || 'admin' }}
           TEST_ENV: ci-regression
@@ -71,7 +71,7 @@ jobs:
       - name: Run load test
         if: always()
         env:
-          BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          BASE_URL: ${{ secrets.BASE_URL || 'https://wellcoin.711621.xyz/' }}
           TEST_ENV: ci-regression
           VUS: 5
           DURATION: 20s
@@ -95,7 +95,7 @@ jobs:
       - name: Build dashboard
         if: always()
         env:
-          VITE_BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          VITE_BASE_URL: ${{ secrets.BASE_URL || 'https://wellcoin.711621.xyz/' }}
           VITE_PLATFORM_API_URL: ${{ secrets.PLATFORM_API_URL || '' }}
         run: npm run dashboard:build
 

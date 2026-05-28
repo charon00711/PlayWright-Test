@@ -1,0 +1,104 @@
+{
+  "id": "apirun-20260528-205246",
+  "startedAt": "2026-05-28T12:52:46.367Z",
+  "finishedAt": "2026-05-28T12:52:46.367Z",
+  "results": [
+    {
+      "caseId": "health-check",
+      "name": "站点根路径健康检查",
+      "status": "passed",
+      "durationMs": 1434,
+      "request": {
+        "method": "GET",
+        "url": "https://wellcoin.711621.xyz/",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "access-control-allow-origin": "*",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "cf-cache-status": "DYNAMIC",
+          "cf-ray": "a02d65fb7822308e-SEA",
+          "connection": "keep-alive",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Thu, 28 May 2026 12:52:46 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=JpwbUn5arC3A1CpljwPQi607idVdxEbBiCVLPotCLm4%2BiCEZxdAFIN03730GIJYWltd1e5puNuCVnT960OMDlmYlejcP3u1BsEUwOZl7C3Np9EtL6LVZF5wYxD14axQmILv0YkUaaUN5sVZCsFiPpyIp\"}]}",
+          "server": "cloudflare",
+          "transfer-encoding": "chunked",
+          "vary": "accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "DENY"
+        },
+        "body": "<!doctype html>\n<html lang=\"zh-CN\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/favicon-32.png\" />\n    <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/favicon-16.png\" />\n    <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\" />\n    <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/apple-touch-icon.png\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <meta name=\"description\" content=\"WellCoin - 中心化交易所模拟平台\" />\n    <meta name=\"theme-color\" content=\"#0b0e11\" />\n    <title>WellCoin</title>\n    <script type=\"module\" crossorigin src=\"/assets/index-BS011BI7.js\"></script>\n    <link rel=\"stylesheet\" crossorigin href=\"/assets/index-D8sX-1cw.css\">\n  </head>\n  <body>\n    <div id=\"root\"></div>\n  </body>\n</html>\n",
+        "durationMs": 1434
+      },
+      "assertions": [
+        {
+          "desc": "status in [200,301,302]",
+          "passed": true
+        },
+        {
+          "desc": "responseTime < 5000ms",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "caseId": "login-page-check",
+      "name": "登录页可访问",
+      "status": "failed",
+      "durationMs": 230,
+      "request": {
+        "method": "GET",
+        "url": "https://wellcoin.711621.xyz/html/login.html",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "access-control-allow-origin": "*",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "cf-cache-status": "DYNAMIC",
+          "cf-ray": "a02d65fd6923308e-SEA",
+          "connection": "keep-alive",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Thu, 28 May 2026 12:52:46 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=6tF7RR89ABX2Jpbrvq1qAu%2F%2BbJ8Sdw8u008h8VlQ7j7n5QinA1V2rM%2FXDKAeJFE72JCZxPuYBmBZ%2BeQSMTdFTy2ujOOI7hYvyA6ar%2BgORqG0ph8SB2KRh4fsDScTMkrJQcRyNIWXOobpLHtcm0f6xTOn\"}]}",
+          "server": "cloudflare",
+          "transfer-encoding": "chunked",
+          "vary": "accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "DENY"
+        },
+        "body": "<!doctype html>\n<html lang=\"zh-CN\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/favicon-32.png\" />\n    <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/favicon-16.png\" />\n    <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\" />\n    <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/apple-touch-icon.png\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <meta name=\"description\" content=\"WellCoin - 中心化交易所模拟平台\" />\n    <meta name=\"theme-color\" content=\"#0b0e11\" />\n    <title>WellCoin</title>\n    <script type=\"module\" crossorigin src=\"/assets/index-BS011BI7.js\"></script>\n    <link rel=\"stylesheet\" crossorigin href=\"/assets/index-D8sX-1cw.css\">\n  </head>\n  <body>\n    <div id=\"root\"></div>\n  </body>\n</html>\n",
+        "durationMs": 230
+      },
+      "assertions": [
+        {
+          "desc": "status eq 200",
+          "passed": true
+        },
+        {
+          "desc": "body contains 登录",
+          "passed": false,
+          "message": "body mismatch"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total": 2,
+    "passed": 1,
+    "failed": 1,
+    "error": 0
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "load-1779784285931",
+  "startedAt": "2026-05-26T08:30:53.124Z",
+  "finishedAt": "2026-05-26T08:31:25.931Z",
+  "baseURL": "https://mail.711621.xyz/",
+  "env": "local",
+  "options": {
+    "vus": 10,
+    "duration": "30s"
+  },
+  "metrics": {
+    "rps": 12.527957386655897,
+    "p50": 0,
+    "p95": 722.4429999999998,
+    "p99": 0,
+    "avg": 389.42212165450144,
+    "min": 242.385,
+    "max": 2255.095,
+    "errorRate": 0,
+    "totalRequests": 411,
+    "failedRequests": 0,
+    "vus": 10,
+    "duration": "30s",
+    "iterations": 137
+  }
+}

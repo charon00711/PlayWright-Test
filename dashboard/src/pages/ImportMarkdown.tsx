@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { importMarkdown } from '../api';
 import { ApiBanner } from '../components/ApiBanner';
 import { useApiHealth } from '../hooks/useApiHealth';
+import { useToast } from '../hooks/useToast';
 import { parseMarkdownCase } from '../lib/markdown-case-parser';
 import type { ParsedCasePreview, ParsedReportPreview } from '../types';
 
@@ -22,6 +23,7 @@ const SAMPLE = `# 用例标题
 export function ImportMarkdown() {
   const navigate = useNavigate();
   const apiAvailable = useApiHealth();
+  const toast = useToast();
   const [markdown, setMarkdown] = useState(SAMPLE);
   const [mode, setMode] = useState<'case' | 'report'>('case');
   const [preview, setPreview] = useState<
@@ -53,13 +55,19 @@ export function ImportMarkdown() {
     try {
       const res = await importMarkdown(markdown, mode, true);
       if (res.case) {
-        setMessage(`已导入用例：${res.case.title}`);
+        const msg = `已导入用例：${res.case.title}`;
+        setMessage(msg);
+        toast.showSuccess(msg);
         setTimeout(() => navigate('/cases'), 800);
       } else {
-        setMessage('报告已归档到 reports/ 目录');
+        const msg = '报告已归档到 reports/ 目录';
+        setMessage(msg);
+        toast.showSuccess(msg);
       }
     } catch (err) {
-      setMessage(err instanceof Error ? err.message : String(err));
+      const msg = err instanceof Error ? err.message : String(err);
+      setMessage(msg);
+      toast.showError(`导入失败：${msg}`);
     } finally {
       setImporting(false);
     }

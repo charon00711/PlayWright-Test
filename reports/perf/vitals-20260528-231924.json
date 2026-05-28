@@ -1,0 +1,52 @@
+{
+  "id": "vitals-20260528-231924",
+  "runId": "20260528-231924",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "startedAt": "2026-05-28T15:19:24.185Z",
+  "finishedAt": "2026-05-28T15:19:32.990Z",
+  "entries": [
+    {
+      "testTitle": "注册页 Web Vitals",
+      "url": "https://wellcoin.711621.xyz/register",
+      "metrics": {
+        "ttfb": 319.59999999403954,
+        "domContentLoaded": 2964.5999999940395,
+        "loadEvent": 2964.5999999940395,
+        "fcp": 2496,
+        "cls": 0,
+        "lcp": 2496
+      },
+      "collectedAt": "2026-05-28T15:19:31.653Z",
+      "status": "passed"
+    },
+    {
+      "testTitle": "落地页 Web Vitals",
+      "url": "https://wellcoin.711621.xyz/login",
+      "metrics": {
+        "ttfb": 308.20000000298023,
+        "domContentLoaded": 2997,
+        "loadEvent": 2997.1000000089407,
+        "fcp": 2488,
+        "cls": 0,
+        "lcp": 2488
+      },
+      "collectedAt": "2026-05-28T15:19:31.676Z",
+      "status": "passed"
+    },
+    {
+      "testTitle": "交易页 Web Vitals",
+      "url": "https://wellcoin.711621.xyz/trade",
+      "metrics": {
+        "ttfb": 1065.8999999910593,
+        "domContentLoaded": 4225.29999999702,
+        "loadEvent": 4225.29999999702,
+        "fcp": 4260,
+        "cls": 0,
+        "lcp": 4284
+      },
+      "collectedAt": "2026-05-28T15:19:32.952Z",
+      "status": "passed"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "20260528-213016",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 3658,
+  "startedAt": "2026-05-28T13:30:16.929Z",
+  "finishedAt": "2026-05-28T13:30:20.587Z",
+  "tests": [
+    {
+      "title": "@regression wellcoin注册登录用例",
+      "file": "tests/auth/wellcoin注册登录用例-02sn.spec.ts",
+      "status": "passed",
+      "durationMs": 3142,
+      "module": "smoke"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "20260528-224508",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 0,
+  "failed": 1,
+  "skipped": 0,
+  "durationMs": 19617,
+  "startedAt": "2026-05-28T14:45:08.338Z",
+  "finishedAt": "2026-05-28T14:45:27.955Z",
+  "tests": [
+    {
+      "title": "@regression 划转功能",
+      "file": "tests/smoke/划转功能-lzmd.spec.ts",
+      "module": "smoke",
+      "status": "failed",
+      "durationMs": 19155,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('划转成功（模拟）')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('划转成功（模拟）')\u001b[22m\n",
+      "screenshot": "/Users/charon/PlayWright-Test/test-results/smoke-划转功能-lzmd-划转功能-regression-划转功能-chromium-guest/test-failed-1.png",
+      "video": "/Users/charon/PlayWright-Test/test-results/smoke-划转功能-lzmd-划转功能-regression-划转功能-chromium-guest/video.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "type": "business",
+      "caseName": "划转功能",
+      "steps": [
+        "1、调用下wellcoin注册登录用例",
+        "2、点击资产",
+        "3、模拟充值：选择usdt，金额：10000",
+        "4、点击确认充值按钮",
+        "5、资产划转：选择usdt，金额：1000",
+        "6、点击确认划转按钮"
+      ],
+      "expected": "划转成功",
+      "actual": "实际执行失败：Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('划转成功（模拟）')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('划转成功（模拟）')\u001b[22m\n",
+      "status": "失败",
+      "durationMs": 19155,
+      "executedAt": "2026-05-28T14:45:27.955Z",
+      "runId": "20260528-224508",
+      "source": "tests/smoke/划转功能-lzmd.spec.ts"
+    }
+  ]
+}

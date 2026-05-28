@@ -1,0 +1,82 @@
+{
+  "id": "20260528-231921",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 0,
+  "failed": 3,
+  "skipped": 0,
+  "durationMs": 371,
+  "startedAt": "2026-05-28T15:19:21.443Z",
+  "finishedAt": "2026-05-28T15:19:21.814Z",
+  "tests": [
+    {
+      "title": "交易页 Web Vitals",
+      "file": "tests/perf/web-vitals.spec.ts",
+      "module": "perf",
+      "status": "failed",
+      "durationMs": 0,
+      "error": "Error: browserType.launch: Executable doesn't exist at /var/folders/xs/14dp0b7x19l0hwgv2cv9s8640000gn/T/cursor-sandbox-cache/dda6649f6c44e253e1420b3482ec8bc8/playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+    },
+    {
+      "title": "注册页 Web Vitals",
+      "file": "tests/perf/web-vitals.spec.ts",
+      "module": "perf",
+      "status": "failed",
+      "durationMs": 1,
+      "error": "Error: browserType.launch: Executable doesn't exist at /var/folders/xs/14dp0b7x19l0hwgv2cv9s8640000gn/T/cursor-sandbox-cache/dda6649f6c44e253e1420b3482ec8bc8/playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+    },
+    {
+      "title": "落地页 Web Vitals",
+      "file": "tests/perf/web-vitals.spec.ts",
+      "module": "perf",
+      "status": "failed",
+      "durationMs": 1,
+      "error": "Error: browserType.launch: Executable doesn't exist at /var/folders/xs/14dp0b7x19l0hwgv2cv9s8640000gn/T/cursor-sandbox-cache/dda6649f6c44e253e1420b3482ec8bc8/playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "type": "business",
+      "caseName": "交易页 Web Vitals",
+      "steps": [
+        "执行 Playwright 用例：交易页 Web Vitals"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行失败：Error: browserType.launch: Executable doesn't exist at /var/folders/xs/14dp0b7x19l0hwgv2cv9s8640000gn/T/cursor-sandbox-cache/dda6649f6c44e253e1420b3482ec8bc8/playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+      "status": "失败",
+      "durationMs": 0,
+      "executedAt": "2026-05-28T15:19:21.814Z",
+      "runId": "20260528-231921",
+      "source": "tests/perf/web-vitals.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "注册页 Web Vitals",
+      "steps": [
+        "执行 Playwright 用例：注册页 Web Vitals"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行失败：Error: browserType.launch: Executable doesn't exist at /var/folders/xs/14dp0b7x19l0hwgv2cv9s8640000gn/T/cursor-sandbox-cache/dda6649f6c44e253e1420b3482ec8bc8/playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+      "status": "失败",
+      "durationMs": 1,
+      "executedAt": "2026-05-28T15:19:21.814Z",
+      "runId": "20260528-231921",
+      "source": "tests/perf/web-vitals.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "落地页 Web Vitals",
+      "steps": [
+        "执行 Playwright 用例：落地页 Web Vitals"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行失败：Error: browserType.launch: Executable doesn't exist at /var/folders/xs/14dp0b7x19l0hwgv2cv9s8640000gn/T/cursor-sandbox-cache/dda6649f6c44e253e1420b3482ec8bc8/playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+      "status": "失败",
+      "durationMs": 1,
+      "executedAt": "2026-05-28T15:19:21.814Z",
+      "runId": "20260528-231921",
+      "source": "tests/perf/web-vitals.spec.ts"
+    }
+  ]
+}

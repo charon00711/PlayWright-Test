@@ -1,0 +1,26 @@
+{
+  "id": "20260526-172201",
+  "env": "local",
+  "baseURL": "https://mail.711621.xyz/",
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 16125,
+  "startedAt": "2026-05-26T09:22:01.820Z",
+  "finishedAt": "2026-05-26T09:22:17.945Z",
+  "tests": [
+    {
+      "title": "authenticate as admin",
+      "file": "tests/auth.setup.ts",
+      "status": "passed",
+      "durationMs": 9697
+    },
+    {
+      "title": "test",
+      "file": "tests/recorded/rec-1779784647772.spec.ts",
+      "status": "passed",
+      "durationMs": 5649
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "20260528-220414",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 3567,
+  "startedAt": "2026-05-28T14:04:14.896Z",
+  "finishedAt": "2026-05-28T14:04:18.463Z",
+  "tests": [
+    {
+      "title": "@regression wellcoin注册登录用例",
+      "file": "tests/auth/wellcoin注册登录用例-02sn.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 3132,
+      "video": "/Users/charon/PlayWright-Test/test-results/auth-wellcoin注册登录用例-02sn-w-106cf-例-regression-wellcoin注册登录用例-chromium-guest/video.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "type": "business",
+      "caseName": "wellcoin注册登录用例",
+      "steps": [
+        "1、在页面中点击立即注册按钮",
+        "2、输入邮箱：test@gmail.com",
+        "3、输入密码：123456",
+        "4、点击注册并登录按钮"
+      ],
+      "expected": "注册并登录成功",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 3132,
+      "executedAt": "2026-05-28T14:04:18.463Z",
+      "runId": "20260528-220414",
+      "source": "tests/auth/wellcoin注册登录用例-02sn.spec.ts"
+    }
+  ]
+}

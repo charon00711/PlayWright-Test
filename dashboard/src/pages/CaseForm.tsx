@@ -4,6 +4,8 @@ import { aiGenerateCase, createCase, fetchCase, updateCase } from '../api';
 import { AiStatusBanner } from '../components/AiStatusBanner';
 import { ApiBanner } from '../components/ApiBanner';
 import { useApiHealth } from '../hooks/useApiHealth';
+import { useToast } from '../hooks/useToast';
+import type { TestCase } from '../types';
 
 const MODULES = ['auth', 'admin', 'smoke', 'mailbox', 'recorded'];
 
@@ -12,6 +14,7 @@ export function CaseForm() {
   const isEdit = Boolean(id && id !== 'new');
   const navigate = useNavigate();
   const apiAvailable = useApiHealth();
+  const toast = useToast();
 
   const [title, setTitle] = useState('');
   const [module, setModule] = useState('smoke');
@@ -24,18 +27,31 @@ export function CaseForm() {
   const [aiOpen, setAiOpen] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
+  const [loadingCase, setLoadingCase] = useState(isEdit);
+  const [originalCase, setOriginalCase] = useState<TestCase | null>(null);
 
   useEffect(() => {
     if (!isEdit || !id) return;
-    fetchCase(id).then((c) => {
-      if (!c) return;
-      setTitle(c.title);
-      setModule(c.module);
-      setTagsStr(c.tags.join(' '));
-      setStepsStr(c.steps.join('\n'));
-      setExpected(c.expected);
-      setUseAuth(c.useAuth);
-    });
+    setLoadingCase(true);
+    setError('');
+    fetchCase(id)
+      .then((c) => {
+        if (!c) {
+          setError('用例不存在或加载失败，请返回列表重试');
+          return;
+        }
+        setOriginalCase(c);
+        setTitle(c.title);
+        setModule(c.module);
+        setTagsStr(c.tags.join(' '));
+        setStepsStr(c.steps.join('\n'));
+        setExpected(c.expected);
+        setUseAuth(c.useAuth);
+      })
+      .catch((err) => {
+        setError(err instanceof Error ? err.message : String(err));
+      })
+      .finally(() => setLoadingCase(false));
   }, [id, isEdit]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -53,14 +69,25 @@ export function CaseForm() {
     };
     try {
       if (isEdit && id) {
-        await updateCase(id, { ...body, regenerateSpec: true });
+        const shouldRegenerateSpec =
+          originalCase?.module !== 'recorded' &&
+          !originalCase?.specPath?.startsWith('tests/recorded/');
+        await updateCase(id, { ...body, regenerateSpec: shouldRegenerateSpec });
+        toast.showSuccess(
+          shouldRegenerateSpec
+            ? '用例已保存并更新 Spec'
+            : '录制用例已保存，保留原始录制脚本',
+        );
         navigate('/cases');
       } else {
-        await createCase(body);
+        const created = await createCase(body);
+        toast.showSuccess(`用例「${created.title}」创建成功`);
         navigate('/cases');
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg);
+      toast.showError(`保存失败：${msg}`);
     } finally {
       setSaving(false);
     }
@@ -129,6 +156,8 @@ export function CaseForm() {
         </div>
       )}
 
+      {loadingCase && <p className="muted">加载用例中…</p>}
+
       <form className="card form" onSubmit={handleSubmit}>
         <label>
           标题
@@ -136,7 +165,7 @@ export function CaseForm() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            disabled={!apiAvailable}
+            disabled={!apiAvailable || loadingCase}
           />
         </label>
         <label>
@@ -144,7 +173,7 @@ export function CaseForm() {
           <select
             value={module}
             onChange={(e) => setModule(e.target.value)}
-            disabled={!apiAvailable}
+            disabled={!apiAvailable || loadingCase}
           >
             {MODULES.map((m) => (
               <option key={m} value={m}>
@@ -158,7 +187,7 @@ export function CaseForm() {
           <input
             value={tagsStr}
             onChange={(e) => setTagsStr(e.target.value)}
-            disabled={!apiAvailable}
+            disabled={!apiAvailable || loadingCase}
           />
         </label>
         <label>
@@ -167,7 +196,7 @@ export function CaseForm() {
             rows={6}
             value={stepsStr}
             onChange={(e) => setStepsStr(e.target.value)}
-            disabled={!apiAvailable}
+            disabled={!apiAvailable || loadingCase}
           />
         </label>
         <label>
@@ -176,7 +205,7 @@ export function CaseForm() {
             rows={3}
             value={expected}
             onChange={(e) => setExpected(e.target.value)}
-            disabled={!apiAvailable}
+            disabled={!apiAvailable || loadingCase}
           />
         </label>
         <label className="checkbox-label">
@@ -184,7 +213,7 @@ export function CaseForm() {
             type="checkbox"
             checked={useAuth}
             onChange={(e) => setUseAuth(e.target.checked)}
-            disabled={!apiAvailable}
+            disabled={!apiAvailable || loadingCase}
           />
           使用已登录态（authenticatedTest）
         </label>
@@ -192,7 +221,7 @@ export function CaseForm() {
         <button
           type="submit"
           className="btn primary"
-          disabled={!apiAvailable || saving}
+          disabled={!apiAvailable || saving || loadingCase}
         >
           {saving ? '保存中…' : '保存并生成 Spec'}
         </button>

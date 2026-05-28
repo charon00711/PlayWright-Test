@@ -1,0 +1,315 @@
+{
+  "id": "20260528-231057",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 12,
+  "failed": 1,
+  "skipped": 0,
+  "durationMs": 23925,
+  "startedAt": "2026-05-28T15:10:57.534Z",
+  "finishedAt": "2026-05-28T15:11:21.459Z",
+  "tests": [
+    {
+      "title": "test",
+      "file": "tests/recorded/rec-1779782722984.spec.ts",
+      "module": "recorded",
+      "status": "passed",
+      "durationMs": 283,
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779782722984-test-chromium-guest/video.webm"
+    },
+    {
+      "title": "test",
+      "file": "tests/recorded/rec-1779784168510.spec.ts",
+      "module": "recorded",
+      "status": "passed",
+      "durationMs": 4204,
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779784168510-test-chromium-guest/video.webm"
+    },
+    {
+      "title": "test",
+      "file": "tests/recorded/rec-1779707450029.spec.ts",
+      "module": "recorded",
+      "status": "passed",
+      "durationMs": 5585,
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779707450029-test-chromium-guest/video.webm"
+    },
+    {
+      "title": "@regression 注册登录用例",
+      "file": "tests/auth/wellcoin注册登录用例-02sn.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 5649,
+      "video": "/Users/charon/PlayWright-Test/test-results/auth-wellcoin注册登录用例-02sn-注册登录用例-regression-注册登录用例-chromium-guest/video.webm"
+    },
+    {
+      "title": "test",
+      "file": "tests/recorded/rec-1779779420410.spec.ts",
+      "module": "recorded",
+      "status": "passed",
+      "durationMs": 7768,
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779779420410-test-chromium-guest/video.webm"
+    },
+    {
+      "title": "test",
+      "file": "tests/recorded/rec-1779782768269.spec.ts",
+      "module": "recorded",
+      "status": "passed",
+      "durationMs": 8674,
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779782768269-test-chromium-guest/video.webm"
+    },
+    {
+      "title": "test",
+      "file": "tests/recorded/rec-1779784196499.spec.ts",
+      "module": "recorded",
+      "status": "passed",
+      "durationMs": 4922,
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779784196499-test-chromium-guest/video.webm"
+    },
+    {
+      "title": "test",
+      "file": "tests/recorded/rec-1779787292512.spec.ts",
+      "module": "recorded",
+      "status": "passed",
+      "durationMs": 4080,
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779787292512-test-chromium-guest/video.webm"
+    },
+    {
+      "title": "test",
+      "file": "tests/recorded/rec-1779972796088.spec.ts",
+      "module": "recorded",
+      "status": "passed",
+      "durationMs": 10271,
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779972796088-test-chromium-guest/video.webm"
+    },
+    {
+      "title": "@regression 充值功能",
+      "file": "tests/smoke/充值功能-a8aw.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 7604,
+      "video": "/Users/charon/PlayWright-Test/test-results/smoke-充值功能-a8aw-充值功能-regression-充值功能-chromium-guest/video.webm"
+    },
+    {
+      "title": "@regression 划转功能",
+      "file": "tests/smoke/划转功能-lzmd.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 9108,
+      "video": "/Users/charon/PlayWright-Test/test-results/smoke-划转功能-lzmd-划转功能-regression-划转功能-chromium-guest/video.webm"
+    },
+    {
+      "title": "authenticate as admin",
+      "file": "tests/auth.setup.ts",
+      "module": "other",
+      "status": "failed",
+      "durationMs": 19836,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '登录到临时邮箱' })\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '登录到临时邮箱' })\u001b[22m\n",
+      "screenshot": "/Users/charon/PlayWright-Test/test-results/auth.setup.ts-authenticate-as-admin-setup/test-failed-1.png",
+      "video": "/Users/charon/PlayWright-Test/test-results/auth.setup.ts-authenticate-as-admin-setup/video.webm"
+    },
+    {
+      "title": "test",
+      "file": "tests/recorded/rec-1779980730796.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 15639,
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779980730796-test-chromium-guest/video.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "type": "business",
+      "caseName": "test",
+      "steps": [
+        "执行 Playwright 用例：test"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 283,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/recorded/rec-1779782722984.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "test",
+      "steps": [
+        "执行 Playwright 用例：test"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 4204,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/recorded/rec-1779784168510.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "test",
+      "steps": [
+        "执行 Playwright 用例：test"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 5585,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/recorded/rec-1779707450029.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "注册登录用例",
+      "steps": [
+        "1、在页面中点击立即注册按钮",
+        "2、输入邮箱：test@gmail.com",
+        "3、输入密码：123456",
+        "4、点击注册并登录按钮"
+      ],
+      "expected": "注册并登录成功",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 5649,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/auth/wellcoin注册登录用例-02sn.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "test",
+      "steps": [
+        "执行 Playwright 用例：test"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 7768,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/recorded/rec-1779779420410.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "test",
+      "steps": [
+        "执行 Playwright 用例：test"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 8674,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/recorded/rec-1779782768269.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "test",
+      "steps": [
+        "执行 Playwright 用例：test"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 4922,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/recorded/rec-1779784196499.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "test",
+      "steps": [
+        "执行 Playwright 用例：test"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 4080,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/recorded/rec-1779787292512.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "test",
+      "steps": [
+        "执行 Playwright 用例：test"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 10271,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/recorded/rec-1779972796088.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "充值功能",
+      "steps": [
+        "1、调用下wellcoin注册登录用例",
+        "2、点击资产",
+        "3、模拟充值：选择usdt，金额：10000",
+        "4、点击确认充值按钮"
+      ],
+      "expected": "充值成功",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 7604,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/smoke/充值功能-a8aw.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "划转功能",
+      "steps": [
+        "1、调用下wellcoin注册登录用例",
+        "2、点击资产",
+        "3、模拟充值：选择usdt，金额：10000",
+        "4、点击确认充值按钮",
+        "5、资产划转：选择usdt，金额：1000",
+        "6、点击确认划转按钮"
+      ],
+      "expected": "划转成功",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 9108,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/smoke/划转功能-lzmd.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "authenticate as admin",
+      "steps": [
+        "执行 Playwright 用例：authenticate as admin"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行失败：Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '登录到临时邮箱' })\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '登录到临时邮箱' })\u001b[22m\n",
+      "status": "失败",
+      "durationMs": 19836,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/auth.setup.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "充值划转现货合约交易",
+      "steps": [
+        "见录制脚本"
+      ],
+      "expected": "待补充",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 15639,
+      "executedAt": "2026-05-28T15:11:21.459Z",
+      "runId": "20260528-231057",
+      "source": "tests/recorded/rec-1779980730796.spec.ts"
+    }
+  ]
+}

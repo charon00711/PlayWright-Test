@@ -1,0 +1,85 @@
+{
+  "id": "20260528-232310",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 3,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 8305,
+  "startedAt": "2026-05-28T15:23:10.049Z",
+  "finishedAt": "2026-05-28T15:23:18.354Z",
+  "tests": [
+    {
+      "title": "落地页 Web Vitals",
+      "file": "tests/perf/web-vitals.spec.ts",
+      "module": "perf",
+      "status": "passed",
+      "durationMs": 6951,
+      "video": "/Users/charon/PlayWright-Test/test-results/perf-web-vitals-Web-Vitals-perf-落地页-Web-Vitals-chromium-guest/video.webm",
+      "videoPublic": "/artifacts/20260528-232310/1_web-vitals_spec_ts_落地页_Web_Vitals_vide.webm"
+    },
+    {
+      "title": "交易页 Web Vitals",
+      "file": "tests/perf/web-vitals.spec.ts",
+      "module": "perf",
+      "status": "passed",
+      "durationMs": 6990,
+      "video": "/Users/charon/PlayWright-Test/test-results/perf-web-vitals-Web-Vitals-perf-交易页-Web-Vitals-chromium-guest/video.webm",
+      "videoPublic": "/artifacts/20260528-232310/2_web-vitals_spec_ts_交易页_Web_Vitals_vide.webm"
+    },
+    {
+      "title": "注册页 Web Vitals",
+      "file": "tests/perf/web-vitals.spec.ts",
+      "module": "perf",
+      "status": "passed",
+      "durationMs": 7705,
+      "video": "/Users/charon/PlayWright-Test/test-results/perf-web-vitals-Web-Vitals-perf-注册页-Web-Vitals-chromium-guest/video.webm",
+      "videoPublic": "/artifacts/20260528-232310/3_web-vitals_spec_ts_注册页_Web_Vitals_vide.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "type": "business",
+      "caseName": "落地页 Web Vitals",
+      "steps": [
+        "执行 Playwright 用例：落地页 Web Vitals"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 6951,
+      "executedAt": "2026-05-28T15:23:18.354Z",
+      "runId": "20260528-232310",
+      "source": "tests/perf/web-vitals.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "交易页 Web Vitals",
+      "steps": [
+        "执行 Playwright 用例：交易页 Web Vitals"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 6990,
+      "executedAt": "2026-05-28T15:23:18.354Z",
+      "runId": "20260528-232310",
+      "source": "tests/perf/web-vitals.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "注册页 Web Vitals",
+      "steps": [
+        "执行 Playwright 用例：注册页 Web Vitals"
+      ],
+      "expected": "用例按脚本执行并符合预期",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 7705,
+      "executedAt": "2026-05-28T15:23:18.354Z",
+      "runId": "20260528-232310",
+      "source": "tests/perf/web-vitals.spec.ts"
+    }
+  ]
+}

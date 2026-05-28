@@ -19,13 +19,13 @@ export function PassRateChart({ runs, maxBars = 10 }: Props) {
         {slice.map((run) => {
           const total = run.passed + run.failed + (run.skipped ?? 0);
           const rate = total > 0 ? Math.round((run.passed / total) * 100) : 0;
-          const height = `${(rate / maxRate) * 100}%`;
+          const height = `${Math.max((rate / maxRate) * 100, 4)}%`;
           const isFail = run.failed > 0;
           return (
-            <div key={run.id} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div key={run.id} className="chart-item">
               <div
                 className={`chart-bar ${isFail ? 'fail' : ''}`}
-                style={{ height: height || '4px', width: '100%' }}
+                style={{ height }}
                 title={`${rate}%`}
               />
               <div className="chart-label">{run.id.slice(-6)}</div>

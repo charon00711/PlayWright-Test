@@ -112,9 +112,17 @@ export function IconApiCase({ className }: IconProps) {
 
 export function IconLogo({ className }: IconProps) {
   return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <circle cx="12" cy="12" r="10" />
-      <path d="M8 12l2 2 4-4" />
+    <svg className={className} width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="11" fill="#4f46e5" />
+      <circle cx="12" cy="12" r="10" stroke="#818cf8" strokeWidth="1" />
+      <path
+        d="M7.5 12.2l3 3 6-6"
+        stroke="#ffffff"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
     </svg>
   );
 }

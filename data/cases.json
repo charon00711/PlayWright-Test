@@ -1,94 +1,81 @@
 {
   "cases": [
     {
-      "id": "auth-login-success",
-      "title": "admin 账号登录成功",
-      "module": "auth",
-      "tags": [
-        "@smoke",
-        "@critical"
-      ],
-      "specPath": "tests/auth/login.spec.ts",
-      "steps": [
-        "打开登录页",
-        "输入 admin 凭据",
-        "点击登录"
-      ],
-      "expected": "离开登录页，session 有效",
-      "useAuth": false,
-      "status": "active",
-      "updatedAt": "2026-05-25T00:00:00.000Z"
-    },
-    {
-      "id": "admin-create-user",
-      "title": "创建普通用户 bill01",
-      "module": "admin",
-      "tags": [
-        "@smoke",
-        "@critical",
-        "@regression"
-      ],
-      "specPath": "tests/admin/create-user.spec.ts",
-      "steps": [
-        "登录",
-        "进入用户管理",
-        "创建用户 bill01"
-      ],
-      "expected": "用户创建成功，列表可见 bill01",
-      "useAuth": true,
-      "status": "active",
-      "updatedAt": "2026-05-25T00:00:00.000Z"
-    },
-    {
-      "id": "生成新邮箱-发送邮件-2t7w",
-      "title": "生成新邮箱，发送邮件",
+      "id": "wellcoin注册登录用例-02sn",
+      "title": "注册登录用例",
       "module": "smoke",
       "tags": [
         "@regression"
       ],
-      "specPath": "tests/smoke/生成新邮箱-发送邮件-2t7w.spec.ts",
+      "specPath": "tests/auth/wellcoin注册登录用例-02sn.spec.ts",
       "steps": [
-        "1、登录成功后，生成新邮箱",
-        "2、点击发邮件按钮",
-        "3、新邮件内容：收件人：napaowang11@gmail.com 主题：test 内容：test",
-        "4、点击发送按钮"
+        "1、在页面中点击立即注册按钮",
+        "2、输入邮箱：test@gmail.com",
+        "3、输入密码：123456",
+        "4、点击注册并登录按钮"
       ],
-      "expected": "发送成功",
-      "useAuth": true,
+      "expected": "注册并登录成功",
+      "useAuth": false,
       "status": "active",
-      "updatedAt": "2026-05-25T13:36:45.934Z"
+      "updatedAt": "2026-05-28T14:37:00.695Z",
+      "regenerateSpec": true
     },
     {
-      "id": "recorded-l9848u",
-      "title": "录制用例",
-      "module": "recorded",
+      "id": "充值功能-a8aw",
+      "title": "充值功能",
+      "module": "smoke",
       "tags": [
         "@regression"
       ],
-      "specPath": "tests/recorded/rec-1779716387865.spec.ts",
+      "specPath": "tests/smoke/充值功能-a8aw.spec.ts",
+      "steps": [
+        "1、调用下wellcoin注册登录用例",
+        "2、点击资产",
+        "3、模拟充值：选择usdt，金额：10000",
+        "4、点击确认充值按钮"
+      ],
+      "expected": "充值成功",
+      "useAuth": false,
+      "status": "active",
+      "updatedAt": "2026-05-28T14:29:32.168Z"
+    },
+    {
+      "id": "划转功能-lzmd",
+      "title": "划转功能",
+      "module": "smoke",
+      "tags": [
+        "@regression"
+      ],
+      "specPath": "tests/smoke/划转功能-lzmd.spec.ts",
+      "steps": [
+        "1、调用下wellcoin注册登录用例",
+        "2、点击资产",
+        "3、模拟充值：选择usdt，金额：10000",
+        "4、点击确认充值按钮",
+        "5、资产划转：选择usdt，金额：1000",
+        "6、点击确认划转按钮"
+      ],
+      "expected": "划转成功",
+      "useAuth": false,
+      "status": "active",
+      "updatedAt": "2026-05-28T14:38:40.789Z"
+    },
+    {
+      "id": "recorded-pmmzp1",
+      "title": "充值划转现货合约交易",
+      "module": "smoke",
+      "tags": [
+        "@regression"
+      ],
+      "specPath": "tests/recorded/rec-1779980730796.spec.ts",
       "steps": [
         "见录制脚本"
       ],
       "expected": "待补充",
-      "useAuth": true,
+      "useAuth": false,
       "status": "active",
-      "updatedAt": "2026-05-25T13:40:53.502Z"
-    },
-    {
-      "id": "recorded-lbk0xr",
-      "title": "录制用例01",
-      "module": "recorded",
-      "tags": [
-        "@regression"
-      ],
-      "specPath": "tests/recorded/rec-1779720156394.spec.ts",
-      "steps": [
-        "见录制脚本"
-      ],
-      "expected": "待补充",
-      "useAuth": true,
-      "status": "active",
-      "updatedAt": "2026-05-25T14:46:08.319Z"
+      "updatedAt": "2026-05-28T15:09:23.559Z",
+      "regenerateSpec": false
     }
   ]
 }

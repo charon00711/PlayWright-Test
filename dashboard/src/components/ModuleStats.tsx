@@ -8,7 +8,7 @@ export function ModuleStats({ tests }: Props) {
   const byModule: Record<string, { pass: number; fail: number }> = {};
 
   for (const t of tests) {
-    const m = t.file.match(/tests\/([^/]+)\//)?.[1] ?? 'other';
+    const m = t.module ?? t.file.match(/tests\/([^/]+)\//)?.[1] ?? 'other';
     if (!byModule[m]) byModule[m] = { pass: 0, fail: 0 };
     if (t.status === 'passed') byModule[m].pass++;
     else if (t.status === 'failed') byModule[m].fail++;

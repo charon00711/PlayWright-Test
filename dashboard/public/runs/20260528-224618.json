@@ -1,0 +1,43 @@
+{
+  "id": "20260528-224618",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 9543,
+  "startedAt": "2026-05-28T14:46:18.179Z",
+  "finishedAt": "2026-05-28T14:46:27.722Z",
+  "tests": [
+    {
+      "title": "@regression 划转功能",
+      "file": "tests/smoke/划转功能-lzmd.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 9085,
+      "video": "/Users/charon/PlayWright-Test/test-results/smoke-划转功能-lzmd-划转功能-regression-划转功能-chromium-guest/video.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "type": "business",
+      "caseName": "划转功能",
+      "steps": [
+        "1、调用下wellcoin注册登录用例",
+        "2、点击资产",
+        "3、模拟充值：选择usdt，金额：10000",
+        "4、点击确认充值按钮",
+        "5、资产划转：选择usdt，金额：1000",
+        "6、点击确认划转按钮"
+      ],
+      "expected": "划转成功",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 9085,
+      "executedAt": "2026-05-28T14:46:27.722Z",
+      "runId": "20260528-224618",
+      "source": "tests/smoke/划转功能-lzmd.spec.ts"
+    }
+  ]
+}

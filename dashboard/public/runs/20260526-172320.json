@@ -1,0 +1,13 @@
+{
+  "id": "20260526-172320",
+  "env": "local",
+  "baseURL": "https://mail.711621.xyz/",
+  "passed": 0,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 6,
+  "startedAt": "2026-05-26T09:23:20.459Z",
+  "finishedAt": "2026-05-26T09:23:20.465Z",
+  "tests": [],
+  "playwrightReport": "playwright-report/index.html"
+}

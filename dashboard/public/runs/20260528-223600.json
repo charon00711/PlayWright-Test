@@ -1,0 +1,41 @@
+{
+  "id": "20260528-223600",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 8634,
+  "startedAt": "2026-05-28T14:36:00.542Z",
+  "finishedAt": "2026-05-28T14:36:09.176Z",
+  "tests": [
+    {
+      "title": "@regression 充值功能",
+      "file": "tests/smoke/充值功能-a8aw.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 8178,
+      "video": "/Users/charon/PlayWright-Test/test-results/smoke-充值功能-a8aw-充值功能-regression-充值功能-chromium-guest/video.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "type": "business",
+      "caseName": "充值功能",
+      "steps": [
+        "1、调用下wellcoin注册登录用例",
+        "2、点击资产",
+        "3、模拟充值：选择usdt，金额：10000",
+        "4、点击确认充值按钮"
+      ],
+      "expected": "充值成功",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 8178,
+      "executedAt": "2026-05-28T14:36:09.176Z",
+      "runId": "20260528-223600",
+      "source": "tests/smoke/充值功能-a8aw.spec.ts"
+    }
+  ]
+}

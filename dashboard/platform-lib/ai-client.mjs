@@ -24,7 +24,7 @@ export function getAiConfig(projectRoot) {
     baseURL: env.OPENAI_BASE_URL || 'https://api.openai.com/v1',
     openaiKey,
     anthropicKey,
-    baseUrl: env.BASE_URL || 'https://mail.711621.xyz/',
+    baseUrl: env.BASE_URL || 'https://wellcoin.711621.xyz/',
   };
 }
 

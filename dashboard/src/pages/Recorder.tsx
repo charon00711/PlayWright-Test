@@ -9,6 +9,7 @@ import {
 } from '../api';
 import { ApiBanner } from '../components/ApiBanner';
 import { useApiHealth } from '../hooks/useApiHealth';
+import { useToast } from '../hooks/useToast';
 
 // Built-in BASE_URL injected at build time (Cloudflare/GitHub Pages); fallback to dev API
 const BUILD_BASE_URL = import.meta.env.VITE_BASE_URL ?? '';
@@ -16,6 +17,7 @@ const BUILD_BASE_URL = import.meta.env.VITE_BASE_URL ?? '';
 export function Recorder() {
   const navigate = useNavigate();
   const apiAvailable = useApiHealth();
+  const toast = useToast();
   const [baseURL, setBaseURL] = useState(BUILD_BASE_URL);
   const [status, setStatus] = useState({
     running: false,
@@ -56,11 +58,18 @@ export function Recorder() {
 
   async function handleRegister() {
     if (!status.outputFile) return;
-    await registerRecordedCase({
-      title,
-      outputFile: status.outputFile,
-    });
-    navigate('/cases');
+    try {
+      const created = await registerRecordedCase({
+        title,
+        outputFile: status.outputFile,
+      });
+      toast.showSuccess(`已登记用例：${created.title}`);
+      navigate('/cases');
+    } catch (e) {
+      toast.showError(
+        `登记失败：${e instanceof Error ? e.message : String(e)}`,
+      );
+    }
   }
 
   return (

@@ -9,6 +9,7 @@ import {
 } from '../api';
 import { ApiBanner } from '../components/ApiBanner';
 import { useApiHealth } from '../hooks/useApiHealth';
+import { useToast } from '../hooks/useToast';
 import type {
   ApiBodyType,
   ApiCaseRunResult,
@@ -34,6 +35,7 @@ export function ApiCaseForm() {
   const isEdit = Boolean(id && id !== 'new');
   const navigate = useNavigate();
   const apiAvailable = useApiHealth();
+  const toast = useToast();
 
   const [name, setName] = useState('');
   const [module, setModule] = useState('smoke');
@@ -95,18 +97,24 @@ export function ApiCaseForm() {
       const payload = buildPayload();
       if (isEdit && id) {
         await updateApiCase(id, payload);
+        toast.showSuccess('接口用例已保存');
         if (runAfter) {
           await runApiCase(id);
+          toast.showSuccess('接口用例已执行');
         }
       } else {
         const created = await createApiCase(payload);
+        toast.showSuccess(`接口用例「${created.name}」创建成功`);
         if (runAfter) {
           await runApiCase(created.id);
+          toast.showSuccess('接口用例已执行');
         }
       }
       navigate('/api-cases');
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      const msg = e instanceof Error ? e.message : String(e);
+      setError(msg);
+      toast.showError(`保存失败：${msg}`);
     } finally {
       setSaving(false);
     }
@@ -146,9 +154,9 @@ export function ApiCaseForm() {
   return (
     <div className="page api-case-form">
       <p>
-        <Link to="/api-cases">← 接口用例列表</Link>
+        <Link to="/api-cases">← 接口管理</Link>
       </p>
-      <h2>{isEdit ? '编辑接口用例' : '新建接口用例'}</h2>
+      <h2>{isEdit ? '编辑接口' : '新建接口'}</h2>
       <ApiBanner requireWrite />
 
       {error && <div className="alert alert-error">{error}</div>}

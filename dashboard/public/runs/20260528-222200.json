@@ -1,0 +1,38 @@
+{
+  "id": "20260528-222200",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 3635,
+  "startedAt": "2026-05-28T14:22:00.564Z",
+  "finishedAt": "2026-05-28T14:22:04.199Z",
+  "tests": [
+    {
+      "title": "@regression wellcoin注册登录用例01",
+      "file": "tests/recorded/rec-1779975852935.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 3268,
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779975852935-2983b-regression-wellcoin注册登录用例01-chromium-guest/video.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "type": "business",
+      "caseName": "wellcoin注册登录用例01",
+      "steps": [
+        "见录制脚本"
+      ],
+      "expected": "待补充",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 3268,
+      "executedAt": "2026-05-28T14:22:04.199Z",
+      "runId": "20260528-222200",
+      "source": "tests/recorded/rec-1779975852935.spec.ts"
+    }
+  ]
+}

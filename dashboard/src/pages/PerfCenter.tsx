@@ -14,13 +14,16 @@ import {
   fetchPerfLoad,
   fetchPerfLoadStatus,
   fetchPerfVitals,
+  fetchPerfVitalsStatus,
   triggerLoadTest,
+  triggerVitalsCollection,
 } from '../api';
 import { ApiBanner } from '../components/ApiBanner';
 import { useApiHealth } from '../hooks/useApiHealth';
 import type {
   LoadTestEntry,
   PerfLoadStatus,
+  PerfVitalsStatus,
   PerfVitalsReport,
   WebVitalsEntry,
 } from '../types';
@@ -64,7 +67,9 @@ export function PerfCenter() {
   const [vitalsReports, setVitalsReports] = useState<PerfVitalsReport[]>([]);
   const [loadReports, setLoadReports] = useState<LoadTestEntry[]>([]);
   const [loadStatus, setLoadStatus] = useState<PerfLoadStatus | null>(null);
+  const [vitalsStatus, setVitalsStatus] = useState<PerfVitalsStatus | null>(null);
   const [loading, setLoading] = useState(false);
+  const [vitalsLoading, setVitalsLoading] = useState(false);
   const [error, setError] = useState('');
   const [vus, setVus] = useState(10);
   const [duration, setDuration] = useState('30s');
@@ -77,8 +82,12 @@ export function PerfCenter() {
     setVitalsReports(vitals.reports);
     setLoadReports(load.reports);
     if (apiAvailable) {
-      const status = await fetchPerfLoadStatus();
-      setLoadStatus(status);
+      const [loadSt, vitalsSt] = await Promise.all([
+        fetchPerfLoadStatus(),
+        fetchPerfVitalsStatus(),
+      ]);
+      setLoadStatus(loadSt);
+      setVitalsStatus(vitalsSt);
     }
   }, [apiAvailable]);
 
@@ -87,12 +96,12 @@ export function PerfCenter() {
   }, [refresh]);
 
   useEffect(() => {
-    if (!loadStatus?.running) return;
+    if (!loadStatus?.running && !vitalsStatus?.running) return;
     const timer = window.setInterval(() => {
       void refresh();
     }, 3000);
     return () => window.clearInterval(timer);
-  }, [loadStatus?.running, refresh]);
+  }, [loadStatus?.running, vitalsStatus?.running, refresh]);
 
   const vitalsChartData = useMemo(() => {
     const points: Array<Record<string, string | number>> = [];
@@ -136,6 +145,21 @@ export function PerfCenter() {
   );
 
   const latestVitals = vitalsReports[0]?.entries ?? [];
+  const latestVitalsReport = vitalsReports[0];
+
+  async function handleCollectVitals() {
+    if (!apiAvailable) return;
+    setVitalsLoading(true);
+    setError('');
+    try {
+      await triggerVitalsCollection();
+      await refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setVitalsLoading(false);
+    }
+  }
 
   async function handleRunLoadTest() {
     if (!apiAvailable) return;
@@ -182,6 +206,36 @@ export function PerfCenter() {
 
       {tab === 'vitals' && (
         <div className="perf-panel">
+          {apiAvailable && (
+            <div className="perf-form-card">
+              <h3>采集 Web Vitals</h3>
+              <p className="muted">
+                对 WellCoin 落地页、注册页、交易页执行 LCP / FCP / CLS / TTFB 采样（约 1–2 分钟）
+              </p>
+              <div className="perf-form-row">
+                <button
+                  type="button"
+                  className="btn primary"
+                  disabled={vitalsLoading || vitalsStatus?.running}
+                  onClick={() => void handleCollectVitals()}
+                >
+                  {vitalsStatus?.running ? '采集中…' : '采集最新数据'}
+                </button>
+                {latestVitalsReport && (
+                  <span className="muted">
+                    最近报告：{formatTime(latestVitalsReport.startedAt)} ·{' '}
+                    {latestVitalsReport.baseURL}
+                  </span>
+                )}
+              </div>
+              {vitalsStatus?.running && (
+                <pre className="log-panel perf-log">
+                  {vitalsStatus.output || 'Playwright 正在采集…'}
+                </pre>
+              )}
+            </div>
+          )}
+
           <div className="perf-summary-grid">
             <div className="perf-card">
               <span className="perf-card-label">最近报告</span>
@@ -204,7 +258,9 @@ export function PerfCenter() {
           <div className="perf-chart-card">
             <h3>Web Vitals 趋势</h3>
             {vitalsChartData.length === 0 ? (
-              <p className="muted">暂无 Web Vitals 数据。运行 `npm run test:perf` 采集。</p>
+              <p className="muted">
+                暂无 Web Vitals 数据。点击上方「采集最新数据」或运行 `npm run test:perf`。
+              </p>
             ) : (
               <ResponsiveContainer width="100%" height={320}>
                 <LineChart data={vitalsChartData}>

@@ -12,19 +12,85 @@ function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
 
+function normalizePath(filePath) {
+  return String(filePath || '').replace(/\\/g, '/');
+}
+
+function readCases() {
+  const casesPath = path.join(root, 'data', 'cases.json');
+  if (!fs.existsSync(casesPath)) return [];
+  try {
+    return readJson(casesPath).cases ?? [];
+  } catch {
+    return [];
+  }
+}
+
+function findCaseByFile(cases, file) {
+  const normalized = normalizePath(file);
+  return cases.find((c) => normalizePath(c.specPath) === normalized);
+}
+
+function enrichRunFromCases(run, cases) {
+  for (const test of run.tests ?? []) {
+    const match = findCaseByFile(cases, test.file);
+    if (match) {
+      test.module = match.module;
+    }
+  }
+}
+
+function safeArtifactName(title, fallback, ext) {
+  const base =
+    title
+      .replace(/[^\w\u4e00-\u9fa5-]+/g, '_')
+      .slice(0, 40) || fallback;
+  return `${base}${ext}`;
+}
+
+function copyArtifact(srcPath, destRun, publicBase, title, fallback) {
+  if (!srcPath) return null;
+  const src = path.isAbsolute(srcPath) ? srcPath : path.join(root, srcPath);
+  if (!fs.existsSync(src)) return null;
+  const ext = path.extname(src) || '.bin';
+  const name = safeArtifactName(title, fallback, ext);
+  fs.copyFileSync(src, path.join(destRun, name));
+  return `${publicBase}/${name}`;
+}
+
 function copyArtifacts(tests, runId) {
   const destRun = path.join(artifactsDir, runId);
+  const publicBase = `/artifacts/${runId}`;
   fs.mkdirSync(destRun, { recursive: true });
 
-  for (const t of tests) {
-    if (!t.screenshot) continue;
-    const src = path.isAbsolute(t.screenshot)
-      ? t.screenshot
-      : path.join(root, t.screenshot);
-    if (!fs.existsSync(src)) continue;
-    const name = `${t.title.replace(/[^\w\u4e00-\u9fa5-]+/g, '_').slice(0, 40)}.png`;
-    fs.copyFileSync(src, path.join(destRun, name));
-    t.screenshotPublic = `/artifacts/${runId}/${name}`;
+  for (const [idx, t] of tests.entries()) {
+    const uniqueTitle = `${idx + 1}_${path.basename(t.file || 'test')}_${t.title}`;
+    const screenshotPublic = copyArtifact(
+      t.screenshot,
+      destRun,
+      publicBase,
+      `${uniqueTitle}_screenshot`,
+      `screenshot_${idx}`,
+    );
+    if (screenshotPublic) t.screenshotPublic = screenshotPublic;
+
+    const videoPublic = copyArtifact(
+      t.video,
+      destRun,
+      publicBase,
+      `${uniqueTitle}_video`,
+      `video_${idx}`,
+    );
+    if (videoPublic) t.videoPublic = videoPublic;
+
+    const tracePublic = copyArtifact(
+      t.trace,
+      destRun,
+      publicBase,
+      `${uniqueTitle}_trace`,
+      `trace_${idx}`,
+    );
+    if (tracePublic) t.tracePublic = tracePublic;
   }
 }
 
@@ -39,6 +105,7 @@ function main() {
   fs.mkdirSync(runsDir, { recursive: true });
   fs.mkdirSync(publicRunsDir, { recursive: true });
   fs.mkdirSync(artifactsDir, { recursive: true });
+  const cases = readCases();
 
   const files = fs
     .readdirSync(runsDir)
@@ -49,6 +116,7 @@ function main() {
   for (const file of files) {
     const runPath = path.join(runsDir, file);
     const run = readJson(runPath);
+    enrichRunFromCases(run, cases);
     copyArtifacts(run.tests ?? [], run.id);
     mergeBusinessReports(run.id, run);
     runs.push({

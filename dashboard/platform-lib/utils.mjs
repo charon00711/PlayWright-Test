@@ -19,6 +19,14 @@ export function writeJson(filePath, data) {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
 }
 
+export function decodeRouteParam(value) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
 export function slugify(text) {
   return text
     .toLowerCase()
@@ -49,7 +57,7 @@ export function sendJson(res, status, data) {
 
 export function loadEnv(root) {
   const envPath = path.join(root, '.env');
-  const config = { BASE_URL: 'https://mail.711621.xyz/', TEST_ENV: 'local' };
+  const config = { BASE_URL: 'https://wellcoin.711621.xyz/', TEST_ENV: 'local' };
   if (!fs.existsSync(envPath)) return config;
   for (const line of fs.readFileSync(envPath, 'utf-8').split('\n')) {
     const m = line.match(/^([^#=]+)=(.*)$/);

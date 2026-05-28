@@ -1,0 +1,65 @@
+{
+  "id": "20260528-222049",
+  "env": "local",
+  "baseURL": "https://wellcoin.711621.xyz/",
+  "passed": 1,
+  "failed": 1,
+  "skipped": 0,
+  "durationMs": 28904,
+  "startedAt": "2026-05-28T14:20:49.829Z",
+  "finishedAt": "2026-05-28T14:21:18.733Z",
+  "tests": [
+    {
+      "title": "@regression wellcoin注册登录用例",
+      "file": "tests/auth/wellcoin注册登录用例-02sn.spec.ts",
+      "module": "smoke",
+      "status": "passed",
+      "durationMs": 3801,
+      "video": "/Users/charon/PlayWright-Test/test-results/auth-wellcoin注册登录用例-02sn-w-106cf-例-regression-wellcoin注册登录用例-chromium-guest/video.webm"
+    },
+    {
+      "title": "@regression wellcoin注册登录用例01",
+      "file": "tests/recorded/rec-1779975852935.spec.ts",
+      "module": "smoke",
+      "status": "failed",
+      "durationMs": 24613,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).not.\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: not \u001b[32m/\\/register/\u001b[39m\nReceived string: \u001b[31m\"https://wellcoin.711621.xyz\u001b[7m/register\u001b[27m\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    44 × unexpected value \"https://wellcoin.711621.xyz/register\"\u001b[22m\n",
+      "screenshot": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779975852935-2983b-regression-wellcoin注册登录用例01-chromium-guest/test-failed-1.png",
+      "video": "/Users/charon/PlayWright-Test/test-results/recorded-rec-1779975852935-2983b-regression-wellcoin注册登录用例01-chromium-guest/video.webm"
+    }
+  ],
+  "playwrightReport": "playwright-report/index.html",
+  "businessReports": [
+    {
+      "type": "business",
+      "caseName": "wellcoin注册登录用例",
+      "steps": [
+        "1、在页面中点击立即注册按钮",
+        "2、输入邮箱：test@gmail.com",
+        "3、输入密码：123456",
+        "4、点击注册并登录按钮"
+      ],
+      "expected": "注册并登录成功",
+      "actual": "实际执行通过",
+      "status": "通过",
+      "durationMs": 3801,
+      "executedAt": "2026-05-28T14:21:18.733Z",
+      "runId": "20260528-222049",
+      "source": "tests/auth/wellcoin注册登录用例-02sn.spec.ts"
+    },
+    {
+      "type": "business",
+      "caseName": "wellcoin注册登录用例01",
+      "steps": [
+        "见录制脚本"
+      ],
+      "expected": "待补充",
+      "actual": "实际执行失败：Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).not.\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: not \u001b[32m/\\/register/\u001b[39m\nReceived string: \u001b[31m\"https://wellcoin.711621.xyz\u001b[7m/register\u001b[27m\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    44 × unexpected value \"https://wellcoin.711621.xyz/register\"\u001b[22m\n",
+      "status": "失败",
+      "durationMs": 24613,
+      "executedAt": "2026-05-28T14:21:18.733Z",
+      "runId": "20260528-222049",
+      "source": "tests/recorded/rec-1779975852935.spec.ts"
+    }
+  ]
+}

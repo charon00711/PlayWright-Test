@@ -24,7 +24,7 @@ jobs:
       - name: Run smoke tests
         env:
           CI: true
-          BASE_URL: ${{ secrets.BASE_URL || 'https://mail.711621.xyz/' }}
+          BASE_URL: ${{ secrets.BASE_URL || 'https://wellcoin.711621.xyz/' }}
           TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL || 'admin' }}
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD || 'admin' }}
           TEST_ENV: ci-pr

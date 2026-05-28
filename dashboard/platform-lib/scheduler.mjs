@@ -87,10 +87,41 @@ export function enrichSchedule(schedule) {
   };
 }
 
-export function buildRunBody(target) {
-  if (!target || target.mode === 'all') return {};
-  if (target.mode === 'grep') return { grep: target.tag };
-  if (target.mode === 'spec') return { specPath: target.specPath };
+function readPlatformCases(projectRoot) {
+  const filePath = path.join(projectRoot, 'data', 'cases.json');
+  if (!fs.existsSync(filePath)) return [];
+  const data = readJson(filePath, { cases: [] });
+  return (data.cases ?? []).filter((c) => c.status !== 'inactive' && c.specPath);
+}
+
+function filterCasesByTag(cases, tag) {
+  if (tag === 'smoke') {
+    return cases.filter(
+      (c) => c.module === 'smoke' || (c.tags ?? []).some((t) => String(t).includes('smoke')),
+    );
+  }
+  return cases.filter((c) =>
+    (c.tags ?? []).some((t) => String(t).includes('regression')),
+  );
+}
+
+/** Map schedule target to spawnTestRun body (platform cases, not npm test:ci). */
+export function buildRunBody(projectRoot, target) {
+  const cases = readPlatformCases(projectRoot);
+
+  if (!target || target.mode === 'all') {
+    const specPaths = cases.map((c) => c.specPath);
+    return specPaths.length ? { specPaths } : {};
+  }
+  if (target.mode === 'grep') {
+    const filtered = filterCasesByTag(cases, target.tag || 'regression');
+    const specPaths = filtered.map((c) => c.specPath);
+    if (specPaths.length) return { specPaths };
+    return { grep: target.tag || 'regression' };
+  }
+  if (target.mode === 'spec' && target.specPath) {
+    return { specPath: target.specPath };
+  }
   return {};
 }
 
@@ -143,7 +174,7 @@ export function createScheduleManager(projectRoot, state, runTestFn) {
     }
 
     const startedAt = new Date().toISOString();
-    const runBody = buildRunBody(schedule.target);
+    const runBody = buildRunBody(projectRoot, schedule.target);
 
     try {
       const exitCode = await runTestFn(runBody);

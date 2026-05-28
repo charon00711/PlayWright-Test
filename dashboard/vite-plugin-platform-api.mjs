@@ -32,6 +32,7 @@ import {
 import { handlePerfApi } from './platform-lib/perf-handlers.mjs';
 import { handleApiCasesApi } from './platform-lib/api-runner.mjs';
 import {
+  decodeRouteParam,
   loadEnv,
   parseBody,
   readJson,
@@ -44,13 +45,76 @@ import {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 
+const MAX_RUN_LOG_CHARS = 2_000_000;
+
 const state = {
   record: { running: false, pid: null, output: '', outputFile: null },
-  run: { running: false, output: '', exitCode: null },
+  run: {
+    running: false,
+    output: '',
+    exitCode: null,
+    specPath: null,
+    lastRunId: null,
+  },
 };
 
 let scheduleManager = null;
 const platformApiLogger = createPlatformApiLogger();
+
+function normalizeSpecPath(specPath) {
+  return String(specPath || '').replace(/\\/g, '/');
+}
+
+function specPathMatches(testFile, specPath) {
+  const file = normalizeSpecPath(testFile);
+  const spec = normalizeSpecPath(specPath);
+  return file === spec || file.endsWith(spec) || spec.endsWith(file);
+}
+
+function listRunJsonFiles() {
+  const runsDir = path.join(PROJECT_ROOT, 'reports', 'runs');
+  if (!fs.existsSync(runsDir)) return [];
+  return fs
+    .readdirSync(runsDir)
+    .filter((f) => f.endsWith('.json') && f !== 'index.json' && !f.includes('-biz'));
+}
+
+function findLatestRunForSpec(specPath) {
+  const normalized = normalizeSpecPath(specPath);
+  if (!normalized) return null;
+  let latest = null;
+  for (const file of listRunJsonFiles()) {
+    const run = readJson(path.join(PROJECT_ROOT, 'reports', 'runs', file), null);
+    if (!run?.id) continue;
+    const matched = (run.tests ?? []).some((t) =>
+      specPathMatches(t.file, normalized),
+    );
+    if (!matched) continue;
+    if (
+      !latest ||
+      new Date(run.startedAt).getTime() > new Date(latest.startedAt).getTime()
+    ) {
+      latest = run;
+    }
+  }
+  return latest;
+}
+
+function findLatestRunOverall() {
+  const index = readRunIndex();
+  if (!index.runs.length) return null;
+  return readRunDetail(index.runs[0].id);
+}
+
+function runSyncReports() {
+  return new Promise((resolve, reject) => {
+    const sync = spawn('node', ['scripts/sync-reports.mjs'], {
+      cwd: PROJECT_ROOT,
+    });
+    sync.on('close', (code) => resolve(code ?? 0));
+    sync.on('error', reject);
+  });
+}
 
 function appendProcessLog(message, level = 'info') {
   appendFileEvent(PROJECT_ROOT, {
@@ -69,21 +133,46 @@ function spawnTestRun(body, runState) {
     }
     clearFileEvents(PROJECT_ROOT);
     appendProcessLog('测试任务启动');
-    const args = ['run', 'test:ci'];
+
+    let cmd = 'npm';
+    let args = ['run', 'test:ci'];
     if (body.grep === 'smoke') args[1] = 'test:smoke';
-    if (body.grep === 'regression') args[1] = 'test:regression';
-    if (body.specPath) {
-      args.length = 0;
-      args.push('exec', 'playwright', 'test', body.specPath);
+    else if (body.grep === 'regression') args[1] = 'test:regression';
+    if (Array.isArray(body.specPaths) && body.specPaths.length > 0) {
+      cmd = 'npx';
+      args = ['playwright', 'test', ...body.specPaths, '--workers=1'];
+      if (shouldUseGuestProject(body.specPaths)) {
+        args.push('--project=chromium-guest');
+      }
+    } else if (body.specPath) {
+      cmd = 'npx';
+      args = ['playwright', 'test', body.specPath];
+      if (shouldUseGuestProject([body.specPath])) {
+        args.push('--project=chromium-guest');
+      }
     }
-    const child = spawn('npm', args, {
-      cwd: PROJECT_ROOT,
-      shell: true,
-      env: { ...process.env, PLAYWRIGHT_BROWSERS_PATH: '0', CI: '' },
-    });
+
+    const cmdLine = `${cmd} ${args.join(' ')}`;
     runState.running = true;
-    runState.output = '';
+    runState.output = `$ ${cmdLine}\n`;
     runState.exitCode = null;
+    runState.specPath = body.specPath
+      ? normalizeSpecPath(body.specPath)
+      : Array.isArray(body.specPaths)
+        ? body.specPaths.map(normalizeSpecPath).join(',')
+        : null;
+    runState.lastRunId = null;
+
+    const child = spawn(cmd, args, {
+      cwd: PROJECT_ROOT,
+      env: {
+        ...process.env,
+        CI: '',
+        FORCE_COLOR: '1',
+        PW_VIDEO_SLOWMO_MS: process.env.PW_VIDEO_SLOWMO_MS || '300',
+        PW_VIDEO_SETTLE_MS: process.env.PW_VIDEO_SETTLE_MS || '2000',
+      },
+    });
     child.stdout?.on('data', (d) => {
       const text = d.toString();
       runState.output += text;
@@ -102,14 +191,33 @@ function spawnTestRun(body, runState) {
       runState.running = false;
       runState.exitCode = code;
       appendProcessLog(`测试结束，退出码 ${code ?? 1}`);
-      spawn('node', ['scripts/sync-reports.mjs'], {
-        cwd: PROJECT_ROOT,
-        shell: true,
-      });
-      resolve(code ?? 1);
+      runState.output += '\n正在同步测试报告…\n';
+      runSyncReports()
+        .then(() => {
+          const run = body.specPath
+            ? findLatestRunForSpec(runState.specPath)
+            : findLatestRunOverall();
+          if (run?.id) {
+            runState.lastRunId = run.id;
+            runState.output += `报告已生成，运行 ID: ${run.id}\n`;
+            appendProcessLog(`报告已同步: ${run.id}`);
+          } else {
+            runState.output += '未找到匹配的测试报告（请稍后在报告中心查看）\n';
+          }
+          resolve(code ?? 1);
+        })
+        .catch((err) => {
+          const msg = err instanceof Error ? err.message : String(err);
+          runState.output += `\n同步报告失败: ${msg}\n`;
+          appendProcessLog(`同步报告失败: ${msg}`, 'error');
+          resolve(code ?? 1);
+        });
     });
     child.on('error', (err) => {
       runState.running = false;
+      const msg = err instanceof Error ? err.message : String(err);
+      runState.output += `\n启动失败: ${msg}\n`;
+      appendProcessLog(`启动失败: ${msg}`, 'error');
       reject(err);
     });
   });
@@ -118,7 +226,7 @@ function spawnTestRun(body, runState) {
 function initScheduleManager() {
   if (scheduleManager) return scheduleManager;
   scheduleManager = createScheduleManager(PROJECT_ROOT, state, (body) =>
-    spawnTestRun(body, state),
+    spawnTestRun(body, state.run),
   );
   scheduleManager.reload();
   return scheduleManager;
@@ -133,15 +241,41 @@ function writeCases(data) {
   writeJson(path.join(PROJECT_ROOT, 'data', 'cases.json'), data);
 }
 
+function getCasesBySpecPaths(specPaths) {
+  const normalized = new Set(specPaths.map(normalizeSpecPath));
+  return readCases().cases.filter((c) =>
+    normalized.has(normalizeSpecPath(c.specPath)),
+  );
+}
+
+function shouldUseGuestProject(specPaths) {
+  const cases = getCasesBySpecPaths(specPaths);
+  return cases.length > 0 && cases.every((c) => c.useAuth === false);
+}
+
 function listBusinessReports() {
   const runsDir = path.join(PROJECT_ROOT, 'reports', 'runs');
   const reports = [];
   if (!fs.existsSync(runsDir)) return reports;
+  const seen = new Set();
   for (const file of fs.readdirSync(runsDir)) {
+    if (file.endsWith('.json') && file !== 'index.json' && !file.includes('-biz')) {
+      const run = readJson(path.join(runsDir, file), {});
+      for (const item of run.businessReports ?? []) {
+        const runId = item.runId || run.id || file.replace(/\.json$/, '');
+        const key = `${runId}:${item.source || ''}:${item.caseName}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        reports.push({ ...item, runId, source: item.source || file });
+      }
+    }
     if (file.endsWith('-biz.json')) {
       const runId = file.replace('-biz.json', '');
       const items = readJson(path.join(runsDir, file), []);
       for (const item of items) {
+        const key = `${runId}:${item.source || ''}:${item.caseName}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
         reports.push({ ...item, runId, source: file });
       }
     }
@@ -238,7 +372,8 @@ export async function handleApi(req, res, urlPath) {
 
   const caseMatch = urlPath.match(/^\/api\/cases\/([^/]+)$/);
   if (caseMatch && req.method === 'GET') {
-    const c = readCases().cases.find((x) => x.id === caseMatch[1]);
+    const caseId = decodeRouteParam(caseMatch[1]);
+    const c = readCases().cases.find((x) => x.id === caseId);
     if (!c) return sendJson(res, 404, { error: 'Not found' });
     return sendJson(res, 200, c);
   }
@@ -246,12 +381,13 @@ export async function handleApi(req, res, urlPath) {
   if (caseMatch && req.method === 'PUT') {
     const body = await parseBody(req);
     const data = readCases();
-    const idx = data.cases.findIndex((x) => x.id === caseMatch[1]);
+    const caseId = decodeRouteParam(caseMatch[1]);
+    const idx = data.cases.findIndex((x) => x.id === caseId);
     if (idx < 0) return sendJson(res, 404, { error: 'Not found' });
     const updated = {
       ...data.cases[idx],
       ...body,
-      id: caseMatch[1],
+      id: caseId,
       updatedAt: new Date().toISOString(),
     };
     data.cases[idx] = updated;
@@ -265,7 +401,8 @@ export async function handleApi(req, res, urlPath) {
 
   if (caseMatch && req.method === 'DELETE') {
     const data = readCases();
-    const idx = data.cases.findIndex((x) => x.id === caseMatch[1]);
+    const caseId = decodeRouteParam(caseMatch[1]);
+    const idx = data.cases.findIndex((x) => x.id === caseId);
     if (idx < 0) return sendJson(res, 404, { error: 'Not found' });
     const [removed] = data.cases.splice(idx, 1);
     writeCases(data);
@@ -334,7 +471,7 @@ export async function handleApi(req, res, urlPath) {
     fs.mkdirSync(outDir, { recursive: true });
     const outputFile = `tests/recorded/rec-${ts}.spec.ts`;
     const outputFull = safePath(PROJECT_ROOT, outputFile);
-    const baseURL = config.BASE_URL || 'https://mail.711621.xyz/';
+    const baseURL = config.BASE_URL || 'https://wellcoin.711621.xyz/';
     const child = spawn(
       'npx',
       ['playwright', 'codegen', baseURL, '--output', outputFull],
@@ -385,7 +522,7 @@ export async function handleApi(req, res, urlPath) {
       specPath: outputFile,
       steps: body.steps || ['见录制脚本'],
       expected: body.expected || '待补充',
-      useAuth: true,
+      useAuth: false,
       status: 'active',
       updatedAt: new Date().toISOString(),
     };
@@ -395,10 +532,16 @@ export async function handleApi(req, res, urlPath) {
   }
 
   if (urlPath === '/api/run/status' && req.method === 'GET') {
+    const output =
+      state.run.output.length > MAX_RUN_LOG_CHARS
+        ? state.run.output.slice(-MAX_RUN_LOG_CHARS)
+        : state.run.output;
     return sendJson(res, 200, {
       running: state.run.running,
-      output: state.run.output.slice(-12000),
+      output,
       exitCode: state.run.exitCode,
+      specPath: state.run.specPath,
+      lastRunId: state.run.lastRunId,
     });
   }
 
@@ -407,8 +550,46 @@ export async function handleApi(req, res, urlPath) {
       return sendJson(res, 400, { error: '测试正在运行' });
     }
     const body = await parseBody(req);
-    spawnTestRun(body, state).catch(() => {});
-    return sendJson(res, 200, { ok: true, started: true });
+    spawnTestRun(body, state.run).catch(() => {});
+    return sendJson(res, 200, {
+      ok: true,
+      started: true,
+      specPath: body.specPath ?? null,
+    });
+  }
+
+  if (urlPath === '/api/runs/case-map' && req.method === 'GET') {
+    const data = readCases();
+    const map = {};
+    for (const c of data.cases) {
+      const run = findLatestRunForSpec(c.specPath);
+      if (!run) continue;
+      map[c.specPath] = {
+        runId: run.id,
+        passed: run.passed,
+        failed: run.failed,
+        skipped: run.skipped ?? 0,
+        startedAt: run.startedAt,
+      };
+    }
+    return sendJson(res, 200, { map });
+  }
+
+  if (urlPath === '/api/runs/latest' && req.method === 'GET') {
+    const reqUrl = new URL(req.url || '/', 'http://localhost');
+    const specPath = reqUrl.searchParams.get('specPath');
+    if (!specPath) {
+      return sendJson(res, 400, { error: '缺少 specPath 参数' });
+    }
+    const run = findLatestRunForSpec(specPath);
+    if (!run) return sendJson(res, 404, { error: '暂无运行记录' });
+    return sendJson(res, 200, {
+      runId: run.id,
+      passed: run.passed,
+      failed: run.failed,
+      skipped: run.skipped ?? 0,
+      startedAt: run.startedAt,
+    });
   }
 
   if (urlPath === '/api/schedules' && req.method === 'GET') {

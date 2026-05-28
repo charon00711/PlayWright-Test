@@ -1,3 +1,82 @@
 {
-  "reports": []
+  "reports": [
+    {
+      "id": "load-1779981431073",
+      "startedAt": "2026-05-28T15:16:39.166Z",
+      "finishedAt": "2026-05-28T15:17:11.073Z",
+      "baseURL": "https://wellcoin.711621.xyz/",
+      "env": "local",
+      "options": {
+        "vus": 100,
+        "duration": "30s"
+      },
+      "metrics": {
+        "rps": 109.06890042282063,
+        "p50": 0,
+        "p95": 330.40414999999996,
+        "p99": 0,
+        "avg": 314.8247991379313,
+        "min": 264.454,
+        "max": 1493.971,
+        "errorRate": 0,
+        "totalRequests": 3480,
+        "failedRequests": 0,
+        "vus": 100,
+        "duration": "30s",
+        "iterations": 1740
+      }
+    },
+    {
+      "id": "load-1779784344431",
+      "startedAt": "2026-05-26T08:31:51.696Z",
+      "finishedAt": "2026-05-26T08:32:24.431Z",
+      "baseURL": "https://mail.711621.xyz/",
+      "env": "local",
+      "options": {
+        "vus": 10,
+        "duration": "30s"
+      },
+      "metrics": {
+        "rps": 11.180913410974085,
+        "p50": 0,
+        "p95": 1054.1019999999996,
+        "p99": 0,
+        "avg": 478.3120601092896,
+        "min": 239.967,
+        "max": 2112.968,
+        "errorRate": 0,
+        "totalRequests": 366,
+        "failedRequests": 0,
+        "vus": 10,
+        "duration": "30s",
+        "iterations": 122
+      }
+    },
+    {
+      "id": "load-1779784285931",
+      "startedAt": "2026-05-26T08:30:53.124Z",
+      "finishedAt": "2026-05-26T08:31:25.931Z",
+      "baseURL": "https://mail.711621.xyz/",
+      "env": "local",
+      "options": {
+        "vus": 10,
+        "duration": "30s"
+      },
+      "metrics": {
+        "rps": 12.527957386655897,
+        "p50": 0,
+        "p95": 722.4429999999998,
+        "p99": 0,
+        "avg": 389.42212165450144,
+        "min": 242.385,
+        "max": 2255.095,
+        "errorRate": 0,
+        "totalRequests": 411,
+        "failedRequests": 0,
+        "vus": 10,
+        "duration": "30s",
+        "iterations": 137
+      }
+    }
+  ]
 }

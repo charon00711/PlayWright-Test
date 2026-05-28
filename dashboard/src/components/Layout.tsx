@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { FloatingAiAssistant } from './FloatingAiAssistant';
+import { ToastProvider } from './ToastProvider';
 import {
   IconCases,
   IconDashboard,
@@ -17,8 +18,8 @@ import {
 const navItems = [
   { to: '/', end: true, label: '仪表盘', Icon: IconDashboard },
   { to: '/recorder', label: '录制测试', Icon: IconRecorder },
-  { to: '/cases', label: '测试用例', Icon: IconCases },
-  { to: '/api-cases', label: '接口用例', Icon: IconApiCase },
+  { to: '/cases', label: '用例管理', Icon: IconCases },
+  { to: '/api-cases', label: '接口管理', Icon: IconApiCase },
   { to: '/import', label: 'Markdown 导入', Icon: IconImport },
   { to: '/reports', label: '测试报告', Icon: IconReports },
   { to: '/scheduler', label: '定时中心', Icon: IconSchedule },
@@ -29,6 +30,7 @@ const navItems = [
 
 export function Layout() {
   return (
+    <ToastProvider>
     <div className="layout">
       <aside className="sidebar">
         <div className="sidebar-brand">
@@ -56,5 +58,6 @@ export function Layout() {
       </main>
       <FloatingAiAssistant />
     </div>
+    </ToastProvider>
   );
 }

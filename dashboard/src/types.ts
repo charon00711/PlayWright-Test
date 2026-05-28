@@ -24,7 +24,10 @@ export type RunTest = {
   screenshot?: string;
   screenshotPublic?: string;
   video?: string;
+  videoPublic?: string;
   trace?: string;
+  tracePublic?: string;
+  module?: string;
 };
 
 export type BusinessReport = {
@@ -87,7 +90,19 @@ export type RunStatus = {
   running: boolean;
   output: string;
   exitCode: number | null;
+  specPath?: string | null;
+  lastRunId?: string | null;
 };
+
+export type CaseRunSummary = {
+  runId: string;
+  passed: number;
+  failed: number;
+  skipped: number;
+  startedAt: string;
+};
+
+export type CaseRunMap = Record<string, CaseRunSummary>;
 
 export type ScheduleTrigger =
   | { type: 'daily'; time: string }
@@ -313,6 +328,12 @@ export type PerfLoadReport = {
 };
 
 export type PerfLoadStatus = {
+  running: boolean;
+  output: string;
+  exitCode: number | null;
+};
+
+export type PerfVitalsStatus = {
   running: boolean;
   output: string;
   exitCode: number | null;

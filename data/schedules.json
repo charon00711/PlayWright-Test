@@ -3,18 +3,17 @@
     {
       "id": "daily-regression",
       "name": "每天自动回归",
-      "enabled": false,
+      "enabled": true,
       "trigger": {
         "type": "daily",
-        "time": "02:00"
+        "time": "08:00"
       },
       "target": {
-        "mode": "grep",
-        "tag": "regression"
+        "mode": "all"
       },
       "createdAt": "2026-05-26T00:00:00.000Z",
-      "updatedAt": "2026-05-26T03:40:56.290Z",
-      "lastRunAt": "2026-05-26T02:35:42.296Z",
+      "updatedAt": "2026-05-28T15:16:00.443Z",
+      "lastRunAt": "2026-05-28T15:15:18.831Z",
       "lastRunStatus": "success",
       "lastRunExitCode": 0
     }
